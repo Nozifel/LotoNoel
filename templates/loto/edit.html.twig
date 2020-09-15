@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Loto{% endblock %}
+
+{% block body %}
+
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-full">
+                <h1>Edit Loto</h1>
+            </div>
+
+            <div class="column is-full">
+                {{ include('loto/_form.html.twig', {'button_label': 'Update'}) }}
+            </div>
+
+            <div class="column is-full">
+                <a href="{{ path('loto_index') }}">back to list</a>
+            </div>
+
+            <div class="column is-full">
+                {{ include('loto/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

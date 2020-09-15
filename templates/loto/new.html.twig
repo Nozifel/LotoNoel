@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Loto{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-full">
+                <h1>Create new Loto</h1>
+            </div>
+
+            <div class="column is-full">
+                {{ include('loto/_form.html.twig') }}
+            </div>
+
+            <div class="column is-full">
+                <a href="{{ path('loto_index') }}">back to list</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

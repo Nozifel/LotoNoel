@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Loto{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-full">
+                <h1>Loto</h1>
+            </div>
+
+            <div class="column is-full">
+                <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ loto.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ loto.nom }}</td>
+            </tr>
+            <tr>
+                <th>Date_debut</th>
+                <td>{{ loto.dateDebut ? loto.dateDebut|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date_fin</th>
+                <td>{{ loto.dateFin ? loto.dateFin|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Hauteur_grille</th>
+                <td>{{ loto.hauteurGrille }}</td>
+            </tr>
+            <tr>
+                <th>Largeur_ille</th>
+                <td>{{ loto.largeurIlle }}</td>
+            </tr>
+        </tbody>
+    </table>
+            </div>
+
+            <div class="column is-full">
+                <a href="{{ path('loto_index') }}">back to list</a>
+            </div>
+
+            <div class="column is-full">
+                <a href="{{ path('loto_edit', {'id': loto.id}) }}">edit</a>
+            </div>
+
+            <div class="column is-full">
+                {{ include('loto/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

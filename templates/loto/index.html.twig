@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Loto index{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-full">
+                <h1>Loto index</h1>
+            </div>
+
+            <div class="column is-full">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nom</th>
+                            <th>Date_debut</th>
+                            <th>Date_fin</th>
+                            <th>Hauteur_grille</th>
+                            <th>Largeur_ille</th>
+                            <th>actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for loto in lotos %}
+                        <tr>
+                            <td>{{ loto.id }}</td>
+                            <td>{{ loto.nom }}</td>
+                            <td>{{ loto.dateDebut ? loto.dateDebut|date('Y-m-d') : '' }}</td>
+                            <td>{{ loto.dateFin ? loto.dateFin|date('Y-m-d') : '' }}</td>
+                            <td>{{ loto.hauteurGrille }}</td>
+                            <td>{{ loto.largeurIlle }}</td>
+                            <td>
+                                <a href="{{ path('loto_show', {'id': loto.id}) }}">show</a>
+                                <a href="{{ path('loto_edit', {'id': loto.id}) }}">edit</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7">no records found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <a href="{{ path('loto_new') }}">Create new</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

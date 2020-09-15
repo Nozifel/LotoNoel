@@ -1,0 +1,17 @@
+{{ form_start(form) }}
+
+    {{ form_errors(form) }}
+
+    {{ form_row(form.nom) }}
+
+    <input type="date" id="my-element">
+
+    {{ form_row(form.hauteur_grille) }}
+
+    {{ form_row(form.largeur_ille) }}
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+
+    {{ form_widget(form._token) }}
+
+{{ form_end(form, {'render_rest': false}) }}

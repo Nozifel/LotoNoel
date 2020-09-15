@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -40,6 +42,16 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      */
     private $isVerified = false;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Loto::class, mappedBy="joueurs")
+     */
+    private $lotos;
+
+    public function __construct()
+    {
+        $this->lotos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -127,6 +139,34 @@ class User implements UserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Loto[]
+     */
+    public function getLotos(): Collection
+    {
+        return $this->lotos;
+    }
+
+    public function addLoto(Loto $loto): self
+    {
+        if (!$this->lotos->contains($loto)) {
+            $this->lotos[] = $loto;
+            $loto->addJoueur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLoto(Loto $loto): self
+    {
+        if ($this->lotos->contains($loto)) {
+            $this->lotos->removeElement($loto);
+            $loto->removeJoueur($this);
+        }
 
         return $this;
     }
