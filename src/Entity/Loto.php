@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * @ORM\Entity(repositoryClass=LotoRepository::class)
  */
@@ -31,6 +33,8 @@ class Loto
 
     /**
      * @ORM\Column(type="date")
+     *
+     * @Assert\GreaterThan(propertyPath="date_debut")
      */
     private $date_fin;
 
@@ -42,7 +46,7 @@ class Loto
     /**
      * @ORM\Column(type="integer")
      */
-    private $largeur_ille;
+    private $largeur_grille;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="lotos")
@@ -107,14 +111,14 @@ class Loto
         return $this;
     }
 
-    public function getLargeurIlle(): ?int
+    public function getLargeurGrille(): ?int
     {
-        return $this->largeur_ille;
+        return $this->largeur_grille;
     }
 
-    public function setLargeurIlle(int $largeur_ille): self
+    public function setLargeurGrille(int $largeur_grille): self
     {
-        $this->largeur_ille = $largeur_ille;
+        $this->largeur_grille = $largeur_grille;
 
         return $this;
     }

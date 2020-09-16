@@ -1,0 +1,44 @@
+<nav class="navbar is-fixed-bottom is-dark" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <img src="/images/logo.svg" alt="Loto de Noël" width="28" height="28">
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+        </a>
+    </div>
+    <div class="navbar-menu">
+        <div class="navbar-end">
+            <div class="navbar-item has-dropdown has-dropdown-up is-hoverable">
+                <a class="navbar-link">
+                    Utilisateurs
+                </a>
+
+                <div class="navbar-dropdown is-right">
+                    <a class="navbar-item" href="{{ url('user_index') }}">
+                        Liste
+                    </a>
+                    <a class="navbar-item" href="{{ url('user_new') }}">
+                        Nouveau
+                    </a>
+                </div>
+            </div>
+            <div class="navbar-item has-dropdown has-dropdown-up is-hoverable">
+                <a class="navbar-link">
+                    Lotos
+                </a>
+
+                <div class="navbar-dropdown is-right">
+                    <a class="navbar-item" href="{{ url('loto_index') }}">
+                        Liste
+                    </a>
+                    <a class="navbar-item" href="{{ url('loto_new') }}">
+                        Nouveau
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

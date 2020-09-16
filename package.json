@@ -17,6 +17,9 @@
     },
     "dependencies": {
         "bulma": "^0.9.0",
-        "bulma-calendar": "^6.0.9"
+        "bulma-calendar": "^6.0.9",
+        "bulma-tagsfield": "^0.1.2",
+        "jquery": "^3.5.1",
+        "select2": "^4.0.13"
     }
 }

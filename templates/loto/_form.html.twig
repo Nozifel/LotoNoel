@@ -2,13 +2,56 @@
 
     {{ form_errors(form) }}
 
-    {{ form_row(form.nom) }}
+    <div class="field">
+        {{ form_label(form.nom, 'Nom', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.nom, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.nom) }}
+        </p>
+    </div>
 
-    <input type="date" id="my-element">
+    <div class="field">
+        <label for="date-picker" class="label">Dates</label>
+        <div class="control">
+            <input type="date" id="date-picker" class="input">
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.date_debut) }}
+        </p>
+    </div>
 
-    {{ form_row(form.hauteur_grille) }}
 
-    {{ form_row(form.largeur_ille) }}
+    <div class="field">
+        {{ form_label(form.hauteur_grille, 'Hauteur de la grille', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.hauteur_grille, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.hauteur_grille) }}
+        </p>
+    </div>
+
+    <div class="field">
+        {{ form_label(form.largeur_grille, 'Largeur de la grille', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.largeur_grille, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.largeur_grille) }}
+        </p>
+    </div>
+
+    <div class="field">
+        {{ form_label(form.joueurs, 'Joueurs', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.joueurs, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.joueurs) }}
+        </p>
+    </div>
 
     <button class="btn">{{ button_label|default('Save') }}</button>
 
