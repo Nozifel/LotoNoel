@@ -10,13 +10,13 @@
         </a>
     </div>
     <div class="navbar-menu">
-        <div class="navbar-end">
+        <div class="navbar-start">
             <div class="navbar-item has-dropdown has-dropdown-up is-hoverable">
                 <a class="navbar-link">
                     Utilisateurs
                 </a>
 
-                <div class="navbar-dropdown is-right">
+                <div class="navbar-dropdown">
                     <a class="navbar-item" href="{{ url('user_index') }}">
                         Liste
                     </a>
@@ -30,12 +30,28 @@
                     Lotos
                 </a>
 
-                <div class="navbar-dropdown is-right">
+                <div class="navbar-dropdown">
                     <a class="navbar-item" href="{{ url('loto_index') }}">
                         Liste
                     </a>
                     <a class="navbar-item" href="{{ url('loto_new') }}">
                         Nouveau
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="navbar-end">
+            <div class="navbar-item has-dropdown has-dropdown-up is-hoverable">
+                <a class="navbar-link">
+                    {{ app.user.email }}
+                </a>
+
+                <div class="navbar-dropdown">
+                    <a class="navbar-item" href="{{ url('user_edit', {id: app.user.id}) }}">
+                        Mon compte
+                    </a>
+                    <a class="navbar-item" href="{{ url('logout') }}">
+                        Déconnexion
                     </a>
                 </div>
             </div>

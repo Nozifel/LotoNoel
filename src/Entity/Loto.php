@@ -17,39 +17,52 @@ class Loto
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank
      */
     private $nom;
 
     /**
      * @ORM\Column(type="date")
+     *
+     * @Assert\NotNull
+     * @Assert\GreaterThan("today")
      */
     private $date_debut;
 
     /**
      * @ORM\Column(type="date")
      *
+     * @Assert\NotNull
      * @Assert\GreaterThan(propertyPath="date_debut")
      */
     private $date_fin;
 
     /**
      * @ORM\Column(type="integer")
+     *
+     * @Assert\NotNull
      */
     private $hauteur_grille;
 
     /**
      * @ORM\Column(type="integer")
+     *
+     * @Assert\NotNull
      */
     private $largeur_grille;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="lotos")
+     *
+     * @Assert\NotNull
      */
     private $joueurs;
 

@@ -7,19 +7,20 @@
     <div class="container">
         <div class="columns is-multiline">
             <div class="column is-full">
-                <h1>Loto index</h1>
+                <h1 class="title">Loto</h1>
             </div>
 
             <div class="column is-full">
-                <table class="table">
+                <table class="table table is-striped is-fullwidth">
                     <thead>
                         <tr>
                             <th>Id</th>
                             <th>Nom</th>
-                            <th>Date_debut</th>
-                            <th>Date_fin</th>
-                            <th>Hauteur_grille</th>
-                            <th>Largeur_ille</th>
+                            <th>Joueurs</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th>Hauteur</th>
+                            <th>Largeur</th>
                             <th>actions</th>
                         </tr>
                     </thead>
@@ -28,24 +29,25 @@
                         <tr>
                             <td>{{ loto.id }}</td>
                             <td>{{ loto.nom }}</td>
-                            <td>{{ loto.dateDebut ? loto.dateDebut|date('Y-m-d') : '' }}</td>
-                            <td>{{ loto.dateFin ? loto.dateFin|date('Y-m-d') : '' }}</td>
+                            <td>{{ loto.joueurs|length }}</td>
+                            <td>{{ loto.dateDebut ? loto.dateDebut|date('d-m-Y') : '' }}</td>
+                            <td>{{ loto.dateFin ? loto.dateFin|date('d-m-Y') : '' }}</td>
                             <td>{{ loto.hauteurGrille }}</td>
-                            <td>{{ loto.largeurIlle }}</td>
+                            <td>{{ loto.largeurGrille }}</td>
                             <td>
-                                <a href="{{ path('loto_show', {'id': loto.id}) }}">show</a>
-                                <a href="{{ path('loto_edit', {'id': loto.id}) }}">edit</a>
+                                <a href="{{ path('loto_show', {'id': loto.id}) }}">Voir</a>
+                                <a href="{{ path('loto_edit', {'id': loto.id}) }}">Editer</a>
                             </td>
                         </tr>
                     {% else %}
                         <tr>
-                            <td colspan="7">no records found</td>
+                            <td colspan="7">Aucuns lotos</td>
                         </tr>
                     {% endfor %}
                     </tbody>
                 </table>
 
-                <a href="{{ path('loto_new') }}">Create new</a>
+                <a href="{{ path('loto_new') }}">Ajouter un nouveau</a>
             </div>
         </div>
     </div>

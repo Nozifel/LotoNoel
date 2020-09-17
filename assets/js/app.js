@@ -30,15 +30,32 @@ for(var i = 0; i < calendars.length; i++) {
     });
 }
 
-var element = document.querySelector('#my-element');
+var element = document.querySelector('#date-picker');
 if (element) {
     // bulmaCalendar instance is available as element.bulmaCalendar
     element.bulmaCalendar.on('select', function(datepicker) {
         var data = datepicker.data
-        var enDate = data.endDate
-        var startDate = data.startDate
+        var _enDate = data.endDate
+        var _startDate = data.startDate
 
-        var strEndDate = enDate.toJSON('DD/MM/YYYY')
-        console.log( strEndDate )
+        var endDate = {
+            day: _enDate.getDate(),
+            month: _enDate.getMonth() + 1,
+            year: _enDate.getFullYear(),
+        };
+
+        var startDate = {
+            day: _startDate.getDate(),
+            month: _startDate.getMonth() + 1,
+            year: _startDate.getFullYear(),
+        };
+
+        $("[name='loto[date_debut][day]']").val( startDate.day )
+        $("[name='loto[date_debut][month]']").val( startDate.month )
+        $("[name='loto[date_debut][year]']").val( startDate.year )
+
+        $("[name='loto[date_fin][day]']").val( endDate.day )
+        $("[name='loto[date_fin][month]']").val( endDate.month )
+        $("[name='loto[date_fin][year]']").val( endDate.year )
     });
 }

@@ -3,9 +3,21 @@
 {% block title %}New User{% endblock %}
 
 {% block body %}
-    <h1>Create new User</h1>
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-full">
+                <h1 class="title">Créer un utilisateur</h1>
+            </div>
 
-    {{ include('user/_form.html.twig') }}
+            <div class="column is-full">
+                {{ include('user/_form.html.twig') }}
+            </div>
 
-    <a href="{{ path('user_index') }}">back to list</a>
+            <div class="column is-full">
+                <a href="{{ path('user_index') }}">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}
