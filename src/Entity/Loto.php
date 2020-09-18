@@ -67,9 +67,20 @@ class Loto
     private $joueurs;
 
     /**
-     * @ORM\OneToMany(targetEntity=Tirage::class, mappedBy="loto", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Tirage::class, mappedBy="loto", orphanRemoval=true, cascade={"persist"})
      */
     private $tirages;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $tiragesParJour;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="lotosAuteur")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $auteur;
 
     public function __construct()
     {
@@ -195,6 +206,30 @@ class Loto
                 $tirage->setLoto(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTiragesParJour(): ?int
+    {
+        return $this->tiragesParJour;
+    }
+
+    public function setTiragesParJour(?int $tiragesParJour): self
+    {
+        $this->tiragesParJour = $tiragesParJour;
+
+        return $this;
+    }
+
+    public function getAuteur(): ?User
+    {
+        return $this->auteur;
+    }
+
+    public function setAuteur(?User $auteur): self
+    {
+        $this->auteur = $auteur;
 
         return $this;
     }

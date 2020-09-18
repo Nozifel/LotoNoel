@@ -58,9 +58,15 @@ class User implements UserInterface
      */
     private $prenom;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Loto::class, mappedBy="auteur", orphanRemoval=true)
+     */
+    private $lotosAuteur;
+
     public function __construct()
     {
         $this->lotos = new ArrayCollection();
+        $this->lotosAuteur = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -206,6 +212,37 @@ class User implements UserInterface
     public function setPrenom(string $prenom): self
     {
         $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Loto[]
+     */
+    public function getLotosAuteur(): Collection
+    {
+        return $this->lotosAuteur;
+    }
+
+    public function addLotosAuteur(Loto $lotosAuteur): self
+    {
+        if (!$this->lotosAuteur->contains($lotosAuteur)) {
+            $this->lotosAuteur[] = $lotosAuteur;
+            $lotosAuteur->setAuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLotosAuteur(Loto $lotosAuteur): self
+    {
+        if ($this->lotosAuteur->contains($lotosAuteur)) {
+            $this->lotosAuteur->removeElement($lotosAuteur);
+            // set the owning side to null (unless already changed)
+            if ($lotosAuteur->getAuteur() === $this) {
+                $lotosAuteur->setAuteur(null);
+            }
+        }
 
         return $this;
     }

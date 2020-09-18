@@ -27,7 +27,7 @@ class Tirage
     /**
      * @ORM\Column(type="boolean")
      */
-    private $estTirer;
+    private $estTirer = false;
 
     /**
      * @ORM\Column(type="date", nullable=true)

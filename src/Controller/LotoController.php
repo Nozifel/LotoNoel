@@ -3,12 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Loto;
+use App\Entity\Tirage;
 use App\Form\LotoType;
 use App\Repository\LotoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Json;
 
 /**
  * @Route("/loto")
@@ -90,5 +93,42 @@ class LotoController extends AbstractController
         }
 
         return $this->redirectToRoute('loto_index');
+    }
+
+    /**
+     * @Route("/{id}/genererTirage", name="loto_generer_tirage", methods={"POST"})
+     */
+    public function genererTirage(Request $request, Loto $loto): Response
+    {
+        if( $loto->getAuteur()->getId() != $this->getUser()->getId() )
+            return new JsonResponse(
+                ['message' => "Vous n'êtes pas l'auteur"],
+                Response::HTTP_FORBIDDEN
+            );
+
+        $hauteur = $loto->getHauteurGrille();
+        $largeur = $loto->getLargeurGrille();
+        $nbJoueurs = $loto->getJoueurs()->count();
+        $nbJours = $loto->getDateDebut()->diff( $loto->getDateFin() );
+
+        $nbTirage = $hauteur * $largeur * $nbJoueurs;
+
+        $tiragesParJour = floor( $nbTirage / $nbJours->format("%a") );
+
+        $loto->setTiragesParJour( $tiragesParJour );
+
+        for ( $i = 1; $i <= $nbTirage; $i++ ) {
+            $tirage = new Tirage();
+            $tirage->setNombre( $i );
+            $loto->addTirage( $tirage );
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($loto);
+        $entityManager->flush();
+
+        return $this->render('loto/card.html.twig', [
+            'loto' => $loto
+        ]);
     }
 }
