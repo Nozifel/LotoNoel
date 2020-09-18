@@ -66,9 +66,15 @@ class Loto
      */
     private $joueurs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Tirage::class, mappedBy="loto", orphanRemoval=true)
+     */
+    private $tirages;
+
     public function __construct()
     {
         $this->joueurs = new ArrayCollection();
+        $this->tirages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,6 +163,37 @@ class Loto
     {
         if ($this->joueurs->contains($joueur)) {
             $this->joueurs->removeElement($joueur);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tirage[]
+     */
+    public function getTirages(): Collection
+    {
+        return $this->tirages;
+    }
+
+    public function addTirage(Tirage $tirage): self
+    {
+        if (!$this->tirages->contains($tirage)) {
+            $this->tirages[] = $tirage;
+            $tirage->setLoto($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTirage(Tirage $tirage): self
+    {
+        if ($this->tirages->contains($tirage)) {
+            $this->tirages->removeElement($tirage);
+            // set the owning side to null (unless already changed)
+            if ($tirage->getLoto() === $this) {
+                $tirage->setLoto(null);
+            }
         }
 
         return $this;

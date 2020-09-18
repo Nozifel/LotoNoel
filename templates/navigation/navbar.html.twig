@@ -11,6 +11,7 @@
     </div>
     <div class="navbar-menu">
         <div class="navbar-start">
+            {%  if app.user %}
             <div class="navbar-item has-dropdown has-dropdown-up is-hoverable">
                 <a class="navbar-link">
                     Utilisateurs
@@ -39,8 +40,10 @@
                     </a>
                 </div>
             </div>
+            {% endif %}
         </div>
         <div class="navbar-end">
+            {%  if app.user %}
             <div class="navbar-item has-dropdown has-dropdown-up is-hoverable">
                 <a class="navbar-link">
                     {{ app.user.email }}
@@ -55,6 +58,7 @@
                     </a>
                 </div>
             </div>
+            {% endif %}
         </div>
     </div>
 </nav>

@@ -11,6 +11,46 @@
             </div>
 
             <div class="column is-full">
+                {% for loto in lotos %}
+                <div class="card">
+                    <header class="card-header">
+                        <p class="card-header-title">
+                            {{ loto.nom }} - ({{ loto.id }})
+                        </p>
+                        <a href="#" class="card-header-icon" aria-label="more options">
+                          <span class="icon">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                          </span>
+                        </a>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            Joueurs : <a href="" class="voir-liste-joueurs" data-target=".modal-{{ loto.id }}">{{ loto.joueurs|length }}</a><br>
+                            Hauteur : {{ loto.hauteurGrille }} / Largeur : {{ loto.largeurGrille }}
+                            <br>
+                            <time>{{ loto.dateDebut ? loto.dateDebut|date('d-m-Y') : '' }} - {{ loto.dateFin ? loto.dateFin|date('d-m-Y') : '' }}</time>
+                        </div>
+                    </div>
+                    <footer class="card-footer">
+                        {% if loto.tirages|length == 0 %}
+                            <a href="#" class="card-footer-item">Générer le tirage</a>
+                        {% endif %}
+                        <a href="{{ path('loto_show', {'id': loto.id}) }}" class="card-footer-item">Voir</a>
+                        <a href="{{ path('loto_edit', {'id': loto.id}) }}" class="card-footer-item">Editer</a>
+                    </footer>
+                </div>
+                <div class="modal modal-{{ loto.id }}">
+                    <div class="modal-background"></div>
+                    <div class="modal-content">
+                        <div class="box">
+                           {% for joueur in loto.joueurs %}
+                               <a href="{{ path('user_show', {'id': joueur.id}) }}">{{ joueur.email }}</a><br/>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button class="modal-close is-large" aria-label="close"></button>
+                </div>
+                {% endfor %}
                 <table class="table table is-striped is-fullwidth">
                     <thead>
                         <tr>
@@ -21,6 +61,7 @@
                             <th>Date de fin</th>
                             <th>Hauteur</th>
                             <th>Largeur</th>
+                            <th>Tirages</th>
                             <th>actions</th>
                         </tr>
                     </thead>
@@ -34,9 +75,15 @@
                             <td>{{ loto.dateFin ? loto.dateFin|date('d-m-Y') : '' }}</td>
                             <td>{{ loto.hauteurGrille }}</td>
                             <td>{{ loto.largeurGrille }}</td>
+                            <td>{{ loto.tirages|length > 0 ? 'Fait' : 'A générer' }}</td>
                             <td>
-                                <a href="{{ path('loto_show', {'id': loto.id}) }}">Voir</a>
-                                <a href="{{ path('loto_edit', {'id': loto.id}) }}">Editer</a>
+                                <a href="{{ path('loto_show', {'id': loto.id}) }}" class="button is-info">
+                                    Voir
+                                    {#<span class="mdi mdi-eye-outline"></span>#}
+                                </a>
+                                <a href="{{ path('loto_edit', {'id': loto.id}) }}" class="button is-warning">
+                                    Editer
+                                </a>
                             </td>
                         </tr>
                     {% else %}
@@ -47,7 +94,7 @@
                     </tbody>
                 </table>
 
-                <a href="{{ path('loto_new') }}">Ajouter un nouveau</a>
+                <a href="{{ path('loto_new') }}" class="button">Ajouter un nouveau</a>
             </div>
         </div>
     </div>

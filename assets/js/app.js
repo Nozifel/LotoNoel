@@ -11,6 +11,7 @@ import $ from 'jquery';
 require('select2');
 
 require('./navigation/navbar')
+require('./lotos/loto')
 require('./lotos/formulaire')
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
