@@ -30,7 +30,7 @@
     <div class="modal-content">
         <div class="box">
             {% for joueur in loto.joueurs %}
-                <a href="{{ path('user_show', {'id': joueur.id}) }}">{{ joueur.email }}</a><br/>
+                <a href="{{ path('user_show', {'id': joueur.id}) }}">{{ joueur.prenom }} {{ joueur.nom }}</a><br/>
             {% endfor %}
         </div>
     </div>

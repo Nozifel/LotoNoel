@@ -18,23 +18,37 @@ require('./lotos/formulaire')
 
 var bulmaCalendar = require('bulma-calendar');
 
+if( $('#edit-loto').length > 0 ) {
+    var dateDebutDay = $("[name='loto[date_debut][day]']").val()
+    var dateDebutMonth = $("[name='loto[date_debut][month]']").val()
+    var dateDebutYear = $("[name='loto[date_debut][year]']").val()
+    var dateDebut = dateDebutMonth + "/" + dateDebutDay + "/" + dateDebutYear
+
+    var dateFinDay = $("[name='loto[date_fin][day]']").val()
+    var dateFinMonth = $("[name='loto[date_fin][month]']").val()
+    var dateFinYear = $("[name='loto[date_fin][year]']").val()
+    var dateFin = dateFinMonth + "/" + dateFinDay + "/" + dateFinYear
+}
+
 var calendars = bulmaCalendar.attach('[type="date"]', {
     isRange: true,
-    dateFormat: 'DD/MM/YYYY'
+    dateFormat: 'DD/MM/YYYY',
+    startDate: dateDebutDay ? new Date(dateDebut) : null,
+    endDate: dateDebutDay ? new Date(dateFin) : null,
+    onReady: (datepicker) => {
+
+    }
 });
 
-// Loop on each calendar initialized
 for(var i = 0; i < calendars.length; i++) {
-    // Add listener to date:selected event
     calendars[i].on('select', date => {
-        console.log(date);
-    });
+    })
 }
 
 var element = document.querySelector('#date-picker');
 if (element) {
-    // bulmaCalendar instance is available as element.bulmaCalendar
     element.bulmaCalendar.on('select', function(datepicker) {
+        console.log( datepicker )
         var data = datepicker.data
         var _enDate = data.endDate
         var _startDate = data.startDate

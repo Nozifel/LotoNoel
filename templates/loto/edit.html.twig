@@ -4,22 +4,22 @@
 
 {% block body %}
 
-<section class="section">
+<section class="section" id="edit-loto">
     <div class="container">
         <div class="columns is-multiline">
-            <div class="column is-full">
-                <h1>Edit Loto</h1>
+            <div class="column is-half is-offset-one-quarter">
+                <h1 class="title">Modifier</h1>
             </div>
 
-            <div class="column is-full">
+            <div class="column is-half is-offset-one-quarter">
                 {{ include('loto/_form.html.twig', {'button_label': 'Update'}) }}
             </div>
 
-            <div class="column is-full">
-                <a href="{{ path('loto_index') }}">back to list</a>
+            <div class="column is-half is-offset-one-quarter">
+                <a href="{{ path('loto_index') }}" class="button is-info">Retour à la liste</a>
             </div>
 
-            <div class="column is-full">
+            <div class="column is-half is-offset-one-quarter">
                 {{ include('loto/_delete_form.html.twig') }}
             </div>
         </div>

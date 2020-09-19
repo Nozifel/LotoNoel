@@ -27,8 +27,11 @@ class LotoType extends AbstractType
                 'multiple' => true,
                 'query_builder' => function (UserRepository $er) {
                     return $er->createQueryBuilder('u')
-                        ->orderBy('u.email', 'ASC');
+                        ->orderBy('u.prenom', 'ASC');
                 },
+                'choice_label' => function($joueur){
+                    return $joueur->getPrenom().' '.$joueur->getNom();
+                }
             ])
         ;
     }

@@ -39,6 +39,9 @@ class LotoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+
+            $loto->setAuteur( $this->getUser() );
+
             $entityManager->persist($loto);
             $entityManager->flush();
 
