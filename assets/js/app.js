@@ -9,14 +9,11 @@
 import '../css/app.scss';
 import $ from 'jquery';
 require('select2');
+var bulmaCalendar = require('bulma-calendar');
 
 require('./navigation/navbar')
 require('./lotos/loto')
 require('./lotos/formulaire')
-
-// Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
-
-var bulmaCalendar = require('bulma-calendar');
 
 if( $('#edit-loto').length > 0 ) {
     var dateDebutDay = $("[name='loto[date_debut][day]']").val()
