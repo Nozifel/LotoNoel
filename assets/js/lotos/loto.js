@@ -15,8 +15,8 @@ $(document).on('click', '.modal-close, .modal-background', function(e){
     $('.modal.is-active').toggleClass('is-active')
 })
 
-var tirageGenere = () => {
-    toastr.success('', 'Tirage effectué', {
+var successMessage = ( message ) => {
+    toastr.success('', message, {
         "closeButton": true,
         "progressBar": true,
         "positionClass": "toast-bottom-right",
@@ -24,7 +24,7 @@ var tirageGenere = () => {
     });
 }
 
-var tirageGenereFail = ( message ) => {
+var faillMessage = ( message ) => {
     toastr.danger('', message, {
         "closeButton": true,
         "progressBar": true,
@@ -50,14 +50,43 @@ $(document).on('click', '.generer-tirage', function(e){
         {
             cardLoto.replaceWith( res )
 
-            tirageGenere()
+            successMessage('Le tirage des numéros a été généré.')
         }
         else
         {
-            tirageGenereFail( res.responseJSON.message )
+            faillMessage( res.responseJSON.message )
         }
     })
     .fail(function(res){
-        tirageGenereFail( res.responseJSON.message )
+        faillMessage( res.responseJSON.message )
     });
+})
+
+$(document).on('click', '.autoriser-edition-grilles', function(e){
+    e.preventDefault()
+
+    var ajaxUrl = $(this).attr('href')
+    var cardLoto = $(this).closest('.card-loto').addClass('is-loading')
+
+    $.ajax({
+        method: "POST",
+        url: ajaxUrl,
+        data: {
+        }
+    })
+        .done(function( res, status, xhr ){
+            if( xhr.status == 200 )
+            {
+                cardLoto.replaceWith( res )
+
+                successMessage("L'édtion des grilles a été autorisé.")
+            }
+            else
+            {
+                faillMessage( res.responseJSON.message )
+            }
+        })
+        .fail(function(res){
+            faillMessage( res.responseJSON.message )
+        });
 })

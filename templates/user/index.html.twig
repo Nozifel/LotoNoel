@@ -11,37 +11,11 @@
             </div>
 
             <div class="column is-full">
-                <table class="table table is-striped is-fullwidth">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Email</th>
-                            <th>Roles</th>
-                            <th>Compte vérifié</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for user in users %}
-                        <tr>
-                            <td>{{ user.id }}</td>
-                            <td>{{ user.email }}</td>
-                            <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                            <td>{{ user.isVerified ? 'Oui' : 'Non' }}</td>
-                            <td>
-                                <a href="{{ path('user_show', {'id': user.id}) }}">show</a>
-                                <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="6">no records found</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                {% for user in users %}
+                    {{ include('user/card.html.twig') }}
+                {% endfor %}
 
-                <a href="{{ path('user_new') }}">Create new</a>
+                <a href="{{ path('user_new') }}" class="button">Ajouter un nouveau</a>
             </div>
         </div>
     </div>

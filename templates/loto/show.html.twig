@@ -11,55 +11,22 @@
             </div>
 
             <div class="column is-full">
-                <table class="table table is-striped is-fullwidth">
-                    <tbody>
-                        <tr>
-                            <th>Id</th>
-                            <td>{{ loto.id }}</td>
-                        </tr>
-                        <tr>
-                            <th>Nom</th>
-                            <td>{{ loto.nom }}</td>
-                        </tr>
-                        <tr>
-                            <th>Date de début</th>
-                            <td>{{ loto.dateDebut ? loto.dateDebut|date('Y-m-d') : '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Date de fin</th>
-                            <td>{{ loto.dateFin ? loto.dateFin|date('Y-m-d') : '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Hauteur</th>
-                            <td>{{ loto.hauteurGrille }}</td>
-                        </tr>
-                        <tr>
-                            <th>Largeur</th>
-                            <td>{{ loto.largeurGrille }}</td>
-                        </tr>
-                        <tr>
-                            <th>Joueurs</th>
-                            <td>
-                                {%  for joueur in loto.joueurs %}
-                                    <a href="{{ url('user_show', {id: joueur.id}) }}">{{ joueur.email }}</a>
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                {{ include('loto/card.html.twig') }}
             </div>
 
             <div class="column is-full">
-                <a href="{{ path('loto_index') }}">back to list</a>
+                <a href="{{ path('loto_index') }}" class="button">Retour à la liste</a>
             </div>
 
-            <div class="column is-full">
-                <a href="{{ path('loto_edit', {'id': loto.id}) }}">edit</a>
-            </div>
+            {% if loto.auteur.id == app.user.id %}
+                <div class="column is-full">
+                    <a href="{{ path('loto_edit', {'id': loto.id}) }}" class="button is-link">Modifier</a>
+                </div>
 
-            <div class="column is-full">
-                {{ include('loto/_delete_form.html.twig') }}
-            </div>
+                <div class="column is-full">
+                    {{ include('loto/_delete_form.html.twig') }}
+                </div>
+            {% endif %}
         </div>
     </div>
 </section>

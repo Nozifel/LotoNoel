@@ -1,0 +1,17 @@
+<div class="card mb-6 card-user">
+    <header class="card-header">
+        <p class="card-header-title">
+            {{ user.prenom }} {{ user.nom }} <span class="ml-2 is-size-4 mdi mdi-shield-{{ user.isVerified ? 'check has-text-success' : 'alert has-text-danger' }}"></span>
+        </p>
+        <a href="#" class="card-header-icon" aria-label="more options">
+          <span class="icon">
+            <i class="fas fa-angle-down" aria-hidden="true"></i>
+          </span>
+        </a>
+    </header>
+    <div class="card-content">
+        <div class="content">
+            Email : {{ user.email }}
+        </div>
+    </div>
+</div>

@@ -14,15 +14,23 @@
             Joueurs : <a href="" class="voir-liste-joueurs" data-target=".modal-{{ loto.id }}">{{ loto.joueurs|length }}</a><br>
             Hauteur : {{ loto.hauteurGrille }} / Largeur : {{ loto.largeurGrille }}
             <br>
-            <time>Du {{ loto.dateDebut ? loto.dateDebut|format_date(pattern="d B Y") : '' }} au {{ loto.dateFin ? loto.dateFin|date('d-m-Y') : '' }}</time>
+            <time>Du {{ loto.dateDebut ? loto.dateDebut|format_date(pattern="d MMMM Y") : '' }} au {{ loto.dateFin ? loto.dateFin|format_date(pattern='d MMMM Y') : '' }}</time>
         </div>
     </div>
     <footer class="card-footer">
-        {% if loto.tirages|length == 0 %}
+        {% if loto.autoriserEditionGrilles and app.user in loto.joueurs %}
+            <a href="" class="card-footer-item">Ma grille</a>
+        {% endif %}
+        {% if loto.tirages|length > 0 and app.user.id == loto.auteur.id and not loto.autoriserEditionGrilles %}
+            <a href="{{ path('loto_autoriser_edition_grilles', {'id': loto.id}) }}" class="card-footer-item autoriser-edition-grilles">Autoriser l'édition des grilles</a>
+        {% endif %}
+        {% if loto.tirages|length == 0 and app.user.id == loto.auteur.id %}
             <a href="{{ path('loto_generer_tirage', {'id': loto.id}) }}" class="card-footer-item generer-tirage">Générer le tirage</a>
         {% endif %}
         <a href="{{ path('loto_show', {'id': loto.id}) }}" class="card-footer-item">Voir</a>
-        <a href="{{ path('loto_edit', {'id': loto.id}) }}" class="card-footer-item">Editer</a>
+        {% if app.user.id == loto.auteur.id %}
+            <a href="{{ path('loto_edit', {'id': loto.id}) }}" class="card-footer-item">Editer</a>
+        {% endif %}
     </footer>
 </div>
 <div class="modal modal-{{ loto.id }}">

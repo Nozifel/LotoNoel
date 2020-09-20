@@ -69,6 +69,9 @@ class LotoController extends AbstractController
      */
     public function edit(Request $request, Loto $loto): Response
     {
+        if( $loto->getAuteur()->getId() != $this->getUser()->getId() )
+            throw $this->createNotFoundException('Page non trouvée !');
+
         $form = $this->createForm(LotoType::class, $loto);
         $form->handleRequest($request);
 
@@ -109,9 +112,10 @@ class LotoController extends AbstractController
                 Response::HTTP_FORBIDDEN
             );
 
+        $joueurs = $loto->getJoueurs();
         $hauteur = $loto->getHauteurGrille();
         $largeur = $loto->getLargeurGrille();
-        $nbJoueurs = $loto->getJoueurs()->count();
+        $nbJoueurs = $joueurs->count();
         $nbJours = $loto->getDateDebut()->diff( $loto->getDateFin() );
 
         $nbTirage = $hauteur * $largeur * $nbJoueurs;
@@ -125,6 +129,28 @@ class LotoController extends AbstractController
             $tirage->setNombre( $i );
             $loto->addTirage( $tirage );
         }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($loto);
+        $entityManager->flush();
+
+        return $this->render('loto/card.html.twig', [
+            'loto' => $loto
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/autoriseEditionGrilles", name="loto_autoriser_edition_grilles", methods={"POST"})
+     */
+    public function autoriserEditionGrilles(Request $request, Loto $loto): Response
+    {
+        if( $loto->getAuteur()->getId() != $this->getUser()->getId() )
+            return new JsonResponse(
+                ['message' => "Vous n'êtes pas l'auteur"],
+                Response::HTTP_FORBIDDEN
+            );
+
+        $loto->setAutoriserEditionGrilles( true );
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($loto);

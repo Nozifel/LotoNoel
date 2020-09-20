@@ -82,11 +82,10 @@ class Loto
      */
     private $auteur;
 
-    public function __construct()
-    {
-        $this->joueurs = new ArrayCollection();
-        $this->tirages = new ArrayCollection();
-    }
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $autoriserEditionGrilles = false;
 
     public function getId(): ?int
     {
@@ -230,6 +229,18 @@ class Loto
     public function setAuteur(?User $auteur): self
     {
         $this->auteur = $auteur;
+
+        return $this;
+    }
+
+    public function getAutoriserEditionGrilles(): ?bool
+    {
+        return $this->autoriserEditionGrilles;
+    }
+
+    public function setAutoriserEditionGrilles(bool $autoriserEditionGrilles): self
+    {
+        $this->autoriserEditionGrilles = $autoriserEditionGrilles;
 
         return $this;
     }

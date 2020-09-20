@@ -21,9 +21,11 @@
                     <a class="navbar-item" href="{{ url('user_index') }}">
                         Liste
                     </a>
-                    <a class="navbar-item" href="{{ url('user_new') }}">
-                        Nouveau
-                    </a>
+                    {% if 'ROLE_ADMIN' in app.user.roles %}
+                        <a class="navbar-item" href="{{ url('user_new') }}">
+                            Nouveau
+                        </a>
+                    {% endif %}
                 </div>
             </div>
             <div class="navbar-item has-dropdown has-dropdown-up is-hoverable">
