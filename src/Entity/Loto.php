@@ -87,6 +87,16 @@ class Loto
      */
     private $autoriserEditionGrilles = false;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Combinaison::class, mappedBy="loto", orphanRemoval=true)
+     */
+    private $combinaisons;
+
+    public function __construct()
+    {
+        $this->combinaisons = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -241,6 +251,37 @@ class Loto
     public function setAutoriserEditionGrilles(bool $autoriserEditionGrilles): self
     {
         $this->autoriserEditionGrilles = $autoriserEditionGrilles;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Combinaison[]
+     */
+    public function getCombinaisons(): Collection
+    {
+        return $this->combinaisons;
+    }
+
+    public function addCombinaison(Combinaison $combinaison): self
+    {
+        if (!$this->combinaisons->contains($combinaison)) {
+            $this->combinaisons[] = $combinaison;
+            $combinaison->setLoto($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCombinaison(Combinaison $combinaison): self
+    {
+        if ($this->combinaisons->contains($combinaison)) {
+            $this->combinaisons->removeElement($combinaison);
+            // set the owning side to null (unless already changed)
+            if ($combinaison->getLoto() === $this) {
+                $combinaison->setLoto(null);
+            }
+        }
 
         return $this;
     }
