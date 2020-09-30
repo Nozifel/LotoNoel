@@ -1,7 +1,7 @@
 import $ from 'jquery';
 var toastr = require('toastr');
 
-$(document).on('click', '.voir-liste-joueurs', function(e){
+$(document).on('click', '.show-modal', function(e){
     e.preventDefault()
 
     var cible = $(this).attr('data-target');

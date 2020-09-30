@@ -4,6 +4,14 @@
 @import "~@mdi/font";
 @import "~toastr";
 
+body{
+  &.dev{
+    .navbar{
+      bottom: 36px;
+    }
+  }
+}
+
 @-webkit-keyframes rotating /* Safari and Chrome */ {
   from {
     -webkit-transform: rotate(0deg);

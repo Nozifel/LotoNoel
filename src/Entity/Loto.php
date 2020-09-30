@@ -95,6 +95,7 @@ class Loto
     public function __construct()
     {
         $this->combinaisons = new ArrayCollection();
+        $this->joueurs = new ArrayCollection();
     }
 
     public function getId(): ?int

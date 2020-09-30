@@ -9,7 +9,7 @@
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
     </head>
-    <body class="has-background-grey-lighter">
+    <body class="has-background-grey-lighter {{ app.environment }}">
         {% block body %}{% endblock %}
 
         {{ include('navigation/navbar.html.twig') }}

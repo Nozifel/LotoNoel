@@ -1,12 +1,16 @@
-<div class=""></div>
+<div class="bloc-combinaison">
 
-{% for i in 0..loto.hauteurGrille-1 %}
-    <div>
-        {% for j in 0..loto.largeurGrille-1 %}
-            <span class="checkbox-group">
-                <input type="checkbox" name="c[{{ i }}][{{ j }}]" id="c[{{ i }}][{{ j }}]">
-                <label for="c[{{ i }}][{{ j }}]"></label>
-            </span>
-        {% endfor %}
-    </div>
-{% endfor %}
+    {% for i in 0..loto.hauteurGrille-1 %}
+        <div>
+            {% for j in 0..loto.largeurGrille-1 %}
+                <span class="checkbox-group">
+                    <input type="checkbox" name="c[{{ i }}][{{ j }}]" id="c[{{ i }}][{{ j }}]">
+                    <label for="c[{{ i }}][{{ j }}]"></label>
+                </span>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <a class="reset-combinaison is-block mt-5 has-text-white">Réinitialiser</a>
+
+</div>
