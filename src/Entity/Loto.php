@@ -88,7 +88,7 @@ class Loto
     private $autoriserEditionGrilles = false;
 
     /**
-     * @ORM\OneToMany(targetEntity=Combinaison::class, mappedBy="loto", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Combinaison::class, mappedBy="loto", orphanRemoval=true, cascade={"persist"})
      */
     private $combinaisons;
 

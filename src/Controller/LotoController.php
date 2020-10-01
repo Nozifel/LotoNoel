@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Combinaison;
 use App\Entity\Loto;
 use App\Entity\Tirage;
 use App\Form\LotoType;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Json;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 
 /**
  * @Route("/loto")
@@ -92,6 +94,9 @@ class LotoController extends AbstractController
      */
     public function delete(Request $request, Loto $loto): Response
     {
+        if( $loto->getAuteur()->getId() != $this->getUser()->getId() )
+            throw $this->createNotFoundException('Page non trouvée !');
+
         if ($this->isCsrfTokenValid('delete'.$loto->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($loto);
@@ -152,6 +157,56 @@ class LotoController extends AbstractController
 
         $loto->setAutoriserEditionGrilles( true );
 
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($loto);
+        $entityManager->flush();
+
+        return $this->render('loto/card.html.twig', [
+            'loto' => $loto
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/addCombinaison", name="loto_add_combinaison", methods={"POST"})
+     */
+    public function addCombinaison(Request $request, Loto $loto): Response
+    {
+        if( $loto->getAuteur()->getId() != $this->getUser()->getId() )
+            return new JsonResponse(
+                ['message' => "Vous n'êtes pas l'auteur"],
+                Response::HTTP_FORBIDDEN
+            );
+
+        parse_str($request->get('form'), $datas);
+
+        $combinaison = new Combinaison();
+        $combinaison->setDescription( $datas['description'] );
+        $combinaison->setPattern( $datas['c'] );
+
+        $loto->addCombinaison( $combinaison );
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($loto);
+        $entityManager->flush();
+
+        return $this->render('loto/card.html.twig', [
+            'loto' => $loto
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/deleteCombinaison/{idCombinaison?}", name="loto_delete_combinaison", methods={"POST"})
+     * @Entity("combinaison", expr="repository.find(idCombinaison)")
+     */
+    public function deleteCombinaison( Request $request, Loto $loto, Combinaison $combinaison )
+    {
+        if( $loto->getAuteur()->getId() != $this->getUser()->getId() )
+            return new JsonResponse(
+                ['message' => "Vous n'êtes pas l'auteur"],
+                Response::HTTP_FORBIDDEN
+            );
+
+        $loto->removeCombinaison( $combinaison );
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($loto);
         $entityManager->flush();

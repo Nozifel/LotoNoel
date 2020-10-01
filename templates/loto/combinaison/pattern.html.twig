@@ -1,0 +1,13 @@
+<div id="combinaison-{{ combinaison.id }}">
+    {% for i in 0..loto.hauteurGrille-1 %}
+        <div>
+            <div class="bloc-pattern is-flex">
+                {% for j in 0..loto.largeurGrille-1 %}
+                    <div class="pattern-case {{ combinaison.pattern[i][j] is defined ? 'has-background-danger' : '' }}"></div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <button class="button is-danger is-light is-small mt-3 delete-combinaison show-modal" data-combinaison-id="{{ combinaison.id }}" data-target=".modal-delete-combinaison-{{ loto.id }}">Supprimer</button>
+</div>

@@ -38,6 +38,11 @@ class Combinaison
      */
     private $loto;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +92,18 @@ class Combinaison
     public function setLoto(?Loto $loto): self
     {
         $this->loto = $loto;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

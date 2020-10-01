@@ -1,67 +1,96 @@
-<div class="card mb-6 card-loto">
-    <header class="card-header">
-        <p class="card-header-title">
-            {{ loto.nom }} - ({{ loto.id }})
-        </p>
-        <a href="#" class="card-header-icon" aria-label="more options">
-          <span class="icon">
-            <i class="fas fa-angle-down" aria-hidden="true"></i>
-          </span>
-        </a>
-    </header>
-    <div class="card-content">
-        <div class="content columns">
-            <div class="column is-narrow">
-                <h4 class="title">Résumé</h4>
-                Joueurs : <a href="" class="voir-liste-joueurs show-modal" data-target=".modal-{{ loto.id }}">{{ loto.joueurs|length }}</a><br>
-                Hauteur : {{ loto.hauteurGrille }} / Largeur : {{ loto.largeurGrille }}
-                <br>
-                <time>Du {{ loto.dateDebut ? loto.dateDebut|format_date(pattern="d MMMM Y") : '' }} au {{ loto.dateFin ? loto.dateFin|format_date(pattern='d MMMM Y') : '' }}</time>
-            </div>
-            <div class="column">
-                <h4 class="title">Combinaisons
-                    {% if loto.tirages|length > 0 and app.user.id == loto.auteur.id and loto.dateDebut > "now"|date('Y-m-d') %}
-                        <a class="mdi mdi-checkerboard-plus has-text-primary-dark show-modal" data-target=".modal-add-combinaison-{{ loto.id }}"></a>
-                    {% endif %}
-                </h4>
+<div id="card-loto-{{ loto.id }}">
+    <div class="card mb-6 card-loto">
+        <header class="card-header">
+            <p class="card-header-title">
+                {{ loto.nom }} - ({{ loto.id }})
+            </p>
+            <a href="#" class="card-header-icon" aria-label="more options">
+              <span class="icon">
+                <i class="fas fa-angle-down" aria-hidden="true"></i>
+              </span>
+            </a>
+        </header>
+        <div class="card-content">
+            <div class="content columns">
+                <div class="column is-narrow">
+                    <h4 class="title">Résumé</h4>
+                    Joueurs : <a href="" class="voir-liste-joueurs show-modal" data-target=".modal-{{ loto.id }}">{{ loto.joueurs|length }}</a><br>
+                    Hauteur : {{ loto.hauteurGrille }} / Largeur : {{ loto.largeurGrille }}
+                    <br>
+                    <time>Du {{ loto.dateDebut ? loto.dateDebut|format_date(pattern="d MMMM Y") : '' }} au {{ loto.dateFin ? loto.dateFin|format_date(pattern='d MMMM Y') : '' }}</time>
+                </div>
+                <div class="column">
+                    <h4 class="title">Combinaisons
+                        {% if loto.tirages|length > 0 and app.user.id == loto.auteur.id and loto.dateDebut > "now"|date('Y-m-d') %}
+                            <a class="mdi mdi-checkerboard-plus has-text-primary-dark show-modal" data-target=".modal-add-combinaison-{{ loto.id }}"></a>
+                        {% endif %}
+                    </h4>
+                    <div>
+                        <div class="columns is-multiline">
+                            {% for combinaison in loto.combinaisons %}
+                                <div class="column is-2 bloc-combinaison">
+                                    {{ include('loto/combinaison/pattern.html.twig') }}
+                                </div>
+                            {% else %}
+                                <div class="column">
+                                    <div class="notification is-danger is-light">
+                                        Aucunes combinaisons.
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+        <footer class="card-footer">
+            {% if loto.autoriserEditionGrilles and app.user in loto.joueurs %}
+                <a href="" class="card-footer-item">Ma grille</a>
+            {% endif %}
+            {% if loto.tirages|length > 0 and app.user.id == loto.auteur.id and not loto.autoriserEditionGrilles %}
+                <a href="{{ path('loto_autoriser_edition_grilles', {'id': loto.id}) }}" class="card-footer-item autoriser-edition-grilles">Autoriser l'édition des grilles</a>
+            {% endif %}
+            {% if loto.tirages|length == 0 and app.user.id == loto.auteur.id %}
+                <a href="{{ path('loto_generer_tirage', {'id': loto.id}) }}" class="card-footer-item generer-tirage">Générer le tirage</a>
+            {% endif %}
+            <a href="{{ path('loto_show', {'id': loto.id}) }}" class="card-footer-item">Voir</a>
+            {% if app.user.id == loto.auteur.id %}
+                <a href="{{ path('loto_edit', {'id': loto.id}) }}" class="card-footer-item">Editer</a>
+            {% endif %}
+        </footer>
     </div>
-    <footer class="card-footer">
-        {% if loto.autoriserEditionGrilles and app.user in loto.joueurs %}
-            <a href="" class="card-footer-item">Ma grille</a>
-        {% endif %}
-        {% if loto.tirages|length > 0 and app.user.id == loto.auteur.id and not loto.autoriserEditionGrilles %}
-            <a href="{{ path('loto_autoriser_edition_grilles', {'id': loto.id}) }}" class="card-footer-item autoriser-edition-grilles">Autoriser l'édition des grilles</a>
-        {% endif %}
-        {% if loto.tirages|length == 0 and app.user.id == loto.auteur.id %}
-            <a href="{{ path('loto_generer_tirage', {'id': loto.id}) }}" class="card-footer-item generer-tirage">Générer le tirage</a>
-        {% endif %}
-        <a href="{{ path('loto_show', {'id': loto.id}) }}" class="card-footer-item">Voir</a>
-        {% if app.user.id == loto.auteur.id %}
-            <a href="{{ path('loto_edit', {'id': loto.id}) }}" class="card-footer-item">Editer</a>
-        {% endif %}
-    </footer>
-</div>
-<div class="modal modal-{{ loto.id }}">
-    <div class="modal-background"></div>
-    <div class="modal-content">
-        <div class="box">
-            {% for joueur in loto.joueurs %}
-                <a href="{{ path('user_show', {'id': joueur.id}) }}">{{ joueur.prenom }} {{ joueur.nom }}</a><br/>
-            {% endfor %}
+    <div class="modal modal-{{ loto.id }}">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box">
+                {% for joueur in loto.joueurs %}
+                    <a href="{{ path('user_show', {'id': joueur.id}) }}">{{ joueur.prenom }} {{ joueur.nom }}</a><br/>
+                {% endfor %}
+            </div>
         </div>
+        <button class="modal-close is-large" aria-label="close"></button>
     </div>
-    <button class="modal-close is-large" aria-label="close"></button>
-</div>
 
-<div class="modal modal-add-combinaison-{{ loto.id }}" data-loto-id="{{ loto.id }}">
-    <div class="modal-background"></div>
-    <div class="modal-content">
-        <div class="box has-background-grey has-text-centered">
-            <h4 class="title has-text-white">Ajouter une combinaison</h4>
-            {% include "loto/combinaison/bloc.html.twig" %}
+    <div class="modal modal-add-combinaison-{{ loto.id }}" data-loto-id="{{ loto.id }}">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box has-background-grey has-text-centered">
+                <h4 class="title has-text-white">Ajouter une combinaison</h4>
+                {% include "loto/combinaison/bloc.html.twig" %}
+            </div>
         </div>
+        <button class="modal-close is-large" aria-label="close"></button>
     </div>
-    <button class="modal-close is-large" aria-label="close"></button>
+
+    <div class="modal modal-delete-combinaison-{{ loto.id }}" data-combinaison-id="" data-bloc-loto="#card-loto-{{ loto.id }}">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box has-background-grey has-text-centered">
+                <h4 class="is-size-4 has-text-white mb-5">Êtes-vous sur de vouloir supprimer cette combinaison ?</h4>
+                <button class="button is-danger confirm-delete-combinaison" data-action="{{ url('loto_delete_combinaison', {id: loto.id}) }}">Oui</button>
+                <button class="button is-link close-modal">Non</button>
+            </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+    </div>
 </div>
