@@ -9,5 +9,7 @@
         </div>
     {% endfor %}
 
-    <button class="button is-danger is-light is-small mt-3 delete-combinaison show-modal" data-combinaison-id="{{ combinaison.id }}" data-target=".modal-delete-combinaison-{{ loto.id }}">Supprimer</button>
+    <button class="button is-danger is-light is-small mt-3 delete-combinaison show-modal is-fullwidth" data-combinaison-id="{{ combinaison.id }}" data-target=".modal-delete-combinaison-{{ loto.id }}">
+        <span class="mdi mdi-trash-can-outline"></span>
+    </button>
 </div>
