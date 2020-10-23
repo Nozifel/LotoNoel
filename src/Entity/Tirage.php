@@ -25,11 +25,6 @@ class Tirage
     private $nombre;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $estTirer = false;
-
-    /**
      * @ORM\Column(type="date", nullable=true)
      */
     private $dateTirage;
@@ -39,6 +34,11 @@ class Tirage
      * @ORM\JoinColumn(nullable=false)
      */
     private $loto;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     */
+    private $joueur;
 
     public function __construct()
     {
@@ -58,18 +58,6 @@ class Tirage
     public function setNombre(int $nombre): self
     {
         $this->nombre = $nombre;
-
-        return $this;
-    }
-
-    public function getEstTirer(): ?bool
-    {
-        return $this->estTirer;
-    }
-
-    public function setEstTirer(bool $estTirer): self
-    {
-        $this->estTirer = $estTirer;
 
         return $this;
     }
@@ -94,6 +82,18 @@ class Tirage
     public function setLoto(?Loto $loto): self
     {
         $this->loto = $loto;
+
+        return $this;
+    }
+
+    public function getJoueur(): ?User
+    {
+        return $this->joueur;
+    }
+
+    public function setJoueur(?User $joueur): self
+    {
+        $this->joueur = $joueur;
 
         return $this;
     }

@@ -63,10 +63,16 @@ class User implements UserInterface
      */
     private $lotosAuteur;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Grille::class, mappedBy="joueur", orphanRemoval=true)
+     */
+    private $grille;
+
     public function __construct()
     {
         $this->lotos = new ArrayCollection();
         $this->lotosAuteur = new ArrayCollection();
+        $this->grille = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -241,6 +247,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($lotosAuteur->getAuteur() === $this) {
                 $lotosAuteur->setAuteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Grille[]
+     */
+    public function getGrille(): Collection
+    {
+        return $this->grille;
+    }
+
+    public function addGrille(Grille $grille): self
+    {
+        if (!$this->grille->contains($grille)) {
+            $this->grille[] = $grille;
+            $grille->setJoueur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGrille(Grille $grille): self
+    {
+        if ($this->grille->contains($grille)) {
+            $this->grille->removeElement($grille);
+            // set the owning side to null (unless already changed)
+            if ($grille->getJoueur() === $this) {
+                $grille->setJoueur(null);
             }
         }
 

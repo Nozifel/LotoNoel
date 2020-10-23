@@ -92,10 +92,16 @@ class Loto
      */
     private $combinaisons;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Grille::class, mappedBy="loto")
+     */
+    private $grilles;
+
     public function __construct()
     {
         $this->combinaisons = new ArrayCollection();
         $this->joueurs = new ArrayCollection();
+        $this->grilles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -281,6 +287,37 @@ class Loto
             // set the owning side to null (unless already changed)
             if ($combinaison->getLoto() === $this) {
                 $combinaison->setLoto(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Grille[]
+     */
+    public function getGrilles(): Collection
+    {
+        return $this->grilles;
+    }
+
+    public function addGrille(Grille $grille): self
+    {
+        if (!$this->grilles->contains($grille)) {
+            $this->grilles[] = $grille;
+            $grille->setLoto($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGrille(Grille $grille): self
+    {
+        if ($this->grilles->contains($grille)) {
+            $this->grilles->removeElement($grille);
+            // set the owning side to null (unless already changed)
+            if ($grille->getLoto() === $this) {
+                $grille->setLoto(null);
             }
         }
 
