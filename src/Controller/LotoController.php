@@ -179,9 +179,34 @@ class LotoController extends AbstractController
 
         parse_str($request->get('form'), $datas);
 
+        $typeCombinaison = $datas['type_combinaison-'.$loto->getId()];
+
         $combinaison = new Combinaison();
         $combinaison->setDescription( $datas['description'] );
-        $combinaison->setPattern( $datas['c'] );
+
+        $combinaison->setType( $typeCombinaison );
+
+        switch ($typeCombinaison)
+        {
+            case '1_colonne':
+                $combinaison->setType( 'colonne' );
+                break;
+
+            case '1_ligne':
+                $combinaison->setType( 'ligne' );
+                break;
+
+            case 'combinaison':
+                $combinaison->setType( 'combinaison' );
+                $combinaison->setPattern( $datas['c'] );
+                break;
+
+            case 'numero':
+                $combinaison->setType( 'numero' );
+                $combinaison->setNumero( $datas['numero'] );
+                break;
+        }
+
 
         $loto->addCombinaison( $combinaison );
 

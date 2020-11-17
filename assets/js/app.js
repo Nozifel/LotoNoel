@@ -14,6 +14,7 @@ var bulmaCalendar = require('bulma-calendar');
 require('./navigation/navbar')
 require('./lotos/loto')
 require('./lotos/formulaire')
+require('./lotos/combinaison')
 
 if( $('#edit-loto').length > 0 ) {
     var dateDebutDay = $("[name='loto[date_debut][day]']").val()

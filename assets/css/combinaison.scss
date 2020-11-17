@@ -1,0 +1,33 @@
+.form-add-combinaison{
+
+  .select2-container{
+    width: 100% !important;
+    margin-bottom: 15px;
+  }
+}
+
+.bloc-combinaison{
+  [class^='choix']{
+    display: none;
+  }
+}
+
+[id^="combinaison-"]{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  text-align: center;
+}
+
+.combinaison{
+  &-colonne, &-ligne, &-numero{
+    border-radius: 4px;
+    background: hsl(0, 0%, 29%);
+
+    .description-combinaison{
+      padding: 5px 3px;
+      color: #fff;
+    }
+  }
+}

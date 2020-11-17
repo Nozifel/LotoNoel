@@ -1,8 +1,17 @@
 import $ from 'jquery';
 
-$('#loto_joueurs').select2({
-    placeholder: 'Sélectionnez les joueurs'
-});
+$(document).ready(function() {
+
+    $('#loto_joueurs').select2({
+        placeholder: 'Sélectionnez les joueurs'
+    });
+
+    $('.type_combinaison').select2({
+        placeholder: 'Sélectionnez le type de combinaison à ajouter',
+        width: 'resolve'
+    });
+})
+
 
 $(document).on('click', '#add-combinaison', function(e){
     e.preventDefault()

@@ -1,4 +1,8 @@
-<div id="combinaison-{{ combinaison.id }}">
+<div id="combinaison-{{ combinaison.id }}" class="combinaison-{{ combinaison.type }}">
+
+
+ {% if combinaison.type == 'combinaison' %}
+
     {% for i in 0..loto.hauteurGrille-1 %}
         <div>
             <div class="bloc-pattern is-flex">
@@ -8,6 +12,20 @@
             </div>
         </div>
     {% endfor %}
+
+{% elseif combinaison.type ==  'colonne' %}
+
+     <div class="description-combinaison">1 Colonne</div>
+
+ {% elseif combinaison.type ==  'ligne' %}
+
+     <div class="description-combinaison">1 Ligne</div>
+
+{% elseif combinaison.type ==  'numero' %}
+
+    <div class="description-combinaison">Le {{ suffix(combinaison.numero) }} numéro</div>
+
+{% endif %}
 
     <button class="button is-danger is-light is-small mt-3 delete-combinaison show-modal is-fullwidth" data-combinaison-id="{{ combinaison.id }}" data-target=".modal-delete-combinaison-{{ loto.id }}">
         <span class="mdi mdi-trash-can-outline"></span>
