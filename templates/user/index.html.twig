@@ -15,7 +15,9 @@
                     {{ include('user/card.html.twig') }}
                 {% endfor %}
 
+                {% if "ROLE_ADMIN" in app.user.roles  %}
                 <a href="{{ path('user_new') }}" class="button">Ajouter un nouveau</a>
+                {% endif %}
             </div>
         </div>
     </div>

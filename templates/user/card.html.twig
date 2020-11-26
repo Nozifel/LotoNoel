@@ -1,7 +1,11 @@
 <div class="card mb-6 card-user">
     <header class="card-header">
         <p class="card-header-title">
-            {{ user.prenom }} {{ user.nom }} <span class="ml-2 is-size-4 mdi mdi-shield-{{ user.isVerified ? 'check has-text-success' : 'alert has-text-danger' }}"></span>
+            {{ user.prenom }} {{ user.nom }}
+            <span class="ml-2 is-size-4 mdi mdi-shield-{{ user.isVerified ? 'check has-text-success' : 'alert has-text-danger' }}"></span>
+            {% if "ROLE_ADMIN" in app.user.roles  %}
+                <a href="{{ path('user_edit', {'id': user.id}) }}" class="ml-2 mdi mdi-cog"></a>
+            {% endif %}
         </p>
         <a href="#" class="card-header-icon" aria-label="more options">
           <span class="icon">

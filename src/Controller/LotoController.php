@@ -7,6 +7,7 @@ use App\Entity\Loto;
 use App\Entity\Tirage;
 use App\Form\LotoType;
 use App\Repository\LotoRepository;
+use App\Repository\TirageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,10 +60,24 @@ class LotoController extends AbstractController
     /**
      * @Route("/{id}", name="loto_show", methods={"GET"})
      */
-    public function show(Loto $loto): Response
+    public function show(Loto $loto, TirageRepository $tirageRepository ): Response
     {
+        $tirages = array();
+
+        if( $loto->getJoueurs()->contains( $this->getUser() ) )
+            $tirages = $tirageRepository->findBy(
+                array(
+                    'loto' => $loto,
+                    'joueur' => $this->getUser()
+                ),
+                array(
+                    'nombre' => 'ASC'
+                )
+            );
+
         return $this->render('loto/show.html.twig', [
             'loto' => $loto,
+            'tirages' => $tirages
         ]);
     }
 
@@ -123,16 +138,39 @@ class LotoController extends AbstractController
         $nbJoueurs = $joueurs->count();
         $nbJours = $loto->getDateDebut()->diff( $loto->getDateFin() );
 
+        $nombresParJoueurs = $hauteur * $largeur;
+
+        $listeJoueurs = array();
+
+        foreach ( $joueurs as $key => $joueur )
+            $listeJoueurs[ $joueur->getId() ] = array('joueur' => $joueur, 'nbNombres' => 0);
+
         $nbTirage = $hauteur * $largeur * $nbJoueurs;
 
         $tiragesParJour = floor( $nbTirage / $nbJours->format("%a") );
 
         $loto->setTiragesParJour( $tiragesParJour );
 
-        for ( $i = 1; $i <= $nbTirage; $i++ ) {
+        $nbTirage = range(1, $nbTirage);
+        shuffle($nbTirage);
+
+        for ( $i = 1; $i < count($nbTirage)+1; $i++ ) {
+
+            do {
+                $idLeJoueur = array_rand($listeJoueurs);
+
+            }while( $listeJoueurs[ $idLeJoueur ]['nbNombres'] == $nombresParJoueurs );
+
+            $listeJoueurs[ $idLeJoueur ]['nbNombres']++;
+
             $tirage = new Tirage();
             $tirage->setNombre( $i );
+            $tirage->setJoueur( $listeJoueurs[ $idLeJoueur ]['joueur'] );
             $loto->addTirage( $tirage );
+
+            if( $listeJoueurs[ $idLeJoueur ]['nbNombres'] == $nombresParJoueurs ) {
+                unset($listeJoueurs[$idLeJoueur]);
+            }
         }
 
         $entityManager = $this->getDoctrine()->getManager();

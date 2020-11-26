@@ -14,6 +14,35 @@
                 {{ include('loto/card.html.twig') }}
             </div>
 
+            {% if app.user in loto.joueurs %}
+                <div class="column is-full">
+                    <h3>Mes numéros</h3>
+                    {#<div id="liste-tirages">
+                        {% if tirages %}
+                            {% for tirage in tirages %}
+                                <span class="tirage has-background-danger">{{ tirage.nombre }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>#}
+                </div>
+                <div class="column is-full">
+                    <div id="ma-grille">
+                        {% set count = 0 %}
+                        {% for i in 0..loto.hauteurGrille-1 %}
+                            <div class="ligne-grille">
+                                {% for j in 0..loto.largeurGrille-1 %}
+                                    <span class="tirage-grille is-sortable">
+                                        <span class="tirage has-background-danger">{{ tirages[ count ].nombre }}</span>
+                                        <input type="text" name="c[{{ i }}][{{ j }}]" id="{{ i }}-{{ j }}-{{ loto.id }}" value="">
+                                    </span>
+                                    {% set count = (count + 1) %}
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="column is-full">
                 <a href="{{ path('loto_index') }}" class="button">Retour à la liste</a>
             </div>

@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,6 +32,9 @@ class UserController extends AbstractController
      */
     public function new(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        if( !in_array("ROLE_ADMIN", $this->getUser()->getRoles()) )
+            throw $this->createNotFoundException('Page non trouvée !');
+
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -71,6 +75,9 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user, UserPasswordEncoderInterface $passwordEncoder): Response
     {
+        if( $user->getId() != $this->getUser()->getId() & !in_array("ROLE_ADMIN", $this->getUser()->getRoles()) )
+            throw $this->createNotFoundException('Page non trouvée !');
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -100,6 +107,9 @@ class UserController extends AbstractController
      */
     public function delete(Request $request, User $user): Response
     {
+        if( $user->getId() != $this->getUser()->getId() & !in_array("ROLE_ADMIN", $this->getUser()->getRoles()) )
+            throw $this->createNotFoundException('Page non trouvée !');
+
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($user);

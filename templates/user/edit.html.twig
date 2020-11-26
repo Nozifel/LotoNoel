@@ -19,9 +19,11 @@
                     <a href="{{ path('user_index') }}" class="button is-info">Retour à la liste</a>
                 </div>
 
+                {% if "ROLE_ADMIN" in app.user.roles  %}
                 <div class="column is-half is-offset-one-quarter">
                     {{ include('user/_delete_form.html.twig') }}
                 </div>
+                {% endif %}
             </div>
         </div>
     </section>
