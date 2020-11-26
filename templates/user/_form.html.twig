@@ -1,0 +1,46 @@
+{{ form_start(form) }}
+
+    <div class="field">
+        {{ form_label(form.email, 'Email', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.email, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.email) }}
+        </p>
+    </div>
+
+    <div class="field">
+        {{ form_label(form.prenom, 'Prénom', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.prenom, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.prenom) }}
+        </p>
+    </div>
+
+    <div class="field">
+        {{ form_label(form.nom, 'Nom', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.nom, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.nom) }}
+        </p>
+    </div>
+
+    <div class="field">
+        {{ form_label(form.password, 'Mot de passe', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.password, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.password) }}
+        </p>
+    </div>
+
+    <button class="button is-primary">{{ button_label|default('Save') }}</button>
+{{ form_widget(form._token) }}
+
+{{ form_end(form, {'render_rest': false}) }}

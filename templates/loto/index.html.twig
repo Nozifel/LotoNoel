@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Loto liste{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-full">
+                <h1 class="title">Loto</h1>
+            </div>
+
+            <div class="column is-full">
+                {% for loto in lotos %}
+                    {{ include('loto/card.html.twig') }}
+                {% endfor %}
+
+                <a href="{{ path('loto_new') }}" class="button">Ajouter un nouveau</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

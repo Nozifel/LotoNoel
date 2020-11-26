@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau loto{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-half is-offset-one-quarter">
+                <h1 class="title">Nouveau Loto</h1>
+            </div>
+
+            <div class="column is-half is-offset-one-quarter">
+                {{ include('loto/_form.html.twig') }}
+            </div>
+
+            <div class="column is-half is-offset-one-quarter">
+                <a href="{{ path('loto_index') }}">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

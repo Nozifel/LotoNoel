@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lotos{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="columns">
+            <div class="column">
+                <h1 class="title">Lotos</h1>
+            </div>
+        </div>
+        <div class="columns">
+            {% for loto in app.user.lotos %}
+                <div class="column is-half">
+                    <a class="box" href="{{ path('loto_show', {'id': loto.id}) }}">
+                        <h2 class="title">{{ loto.nom }}</h2>
+                        <time>{{ loto.dateDebut|format_date(pattern="d MMMM Y") }}</time> - <time>{{ loto.dateFin|format_date(pattern="d MMMM Y") }}</time>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

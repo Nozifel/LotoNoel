@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="200px" height="200px" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve">
+<polyline fill="#336666" points="32.5,128 32.5,167.5 72,167.5 "/>
+<polyline fill="none" stroke="#FFFF01" stroke-linecap="square" stroke-miterlimit="10" points="32.5,128 32.5,167.5 72,167.5 "/>
+<polyline fill="#336666" points="72,32.5 32.5,32.5 32.5,72 "/>
+<polyline fill="none" stroke="#FFFF01" stroke-linecap="square" stroke-miterlimit="10" points="72,32.5 32.5,32.5 32.5,72 "/>
+<polyline fill="#336666" points="128,167.5 167.5,167.5 167.5,128 "/>
+<polyline fill="none" stroke="#FFFF01" stroke-linecap="square" stroke-miterlimit="10" points="128,167.5 167.5,167.5 167.5,128 
+	"/>
+<polyline fill="#336666" points="167.5,72 167.5,32.5 128,32.5 "/>
+<polyline fill="none" stroke="#FFFF01" stroke-linecap="square" stroke-miterlimit="10" points="167.5,72 167.5,32.5 128,32.5 "/>
+<rect x="32.825" y="32.825" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -41.4214 100)" fill="#336666" width="134.35" height="134.35"/>
+<rect x="32.825" y="32.825" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -41.4214 100)" fill="none" stroke="#FFFF01" stroke-linecap="square" stroke-miterlimit="10" width="134.35" height="134.35"/>
+<rect x="36.184" y="36.184" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -41.4214 100)" fill="#336666" width="127.633" height="127.633"/>
+<rect x="36.184" y="36.184" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -41.4214 100)" fill="none" stroke="#FFFF01" stroke-linecap="square" stroke-miterlimit="10" width="127.633" height="127.633"/>
+<g>
+	<defs>
+		<rect id="SVGID_1_" width="200" height="200"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  overflow="visible"/>
+	</clipPath>
+	<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF01" stroke-linecap="square" stroke-miterlimit="10" d="M28.75,100
+		c11.874-11.874,32.772-32.772,50.332-50.333c5.119-5.119,9.955-9.955,14.201-14.201v129.069"/>
+	<path clip-path="url(#SVGID_2_)" fill="none" stroke="#FFFF01" stroke-linecap="square" stroke-miterlimit="10" d="M171.25,100
+		c-11.873,11.873-32.771,32.771-50.332,50.332c-5.119,5.119-9.955,9.955-14.201,14.2c0-36.516,0-92.552,0-129.067"/>
+</g>
+</svg>

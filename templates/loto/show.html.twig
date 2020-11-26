@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Loto fiche{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-full">
+                <h1 class="title">Loto - {{ loto.nom }}</h1>
+            </div>
+
+            <div class="column is-full">
+                {{ include('loto/card.html.twig') }}
+            </div>
+
+            <div class="column is-full">
+                <a href="{{ path('loto_index') }}" class="button">Retour à la liste</a>
+            </div>
+
+            {% if loto.auteur.id == app.user.id %}
+                <div class="column is-full">
+                    <a href="{{ path('loto_edit', {'id': loto.id}) }}" class="button is-link">Modifier</a>
+                </div>
+
+                <div class="column is-full">
+                    {{ include('loto/_delete_form.html.twig') }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

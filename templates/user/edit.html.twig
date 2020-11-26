@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User édition{% endblock %}
+
+{% block body %}
+
+    <section class="section" id="edit-loto">
+        <div class="container">
+            <div class="columns is-multiline">
+                <div class="column is-half is-offset-one-quarter">
+                    <h1 class="title">Modifier</h1>
+                </div>
+
+                <div class="column is-half is-offset-one-quarter">
+                    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+                </div>
+
+                <div class="column is-half is-offset-one-quarter">
+                    <a href="{{ path('user_index') }}" class="button is-info">Retour à la liste</a>
+                </div>
+
+                <div class="column is-half is-offset-one-quarter">
+                    {{ include('user/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

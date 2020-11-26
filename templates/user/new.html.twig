@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer un utilisateur{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-half is-offset-one-quarter">
+                <h1 class="title">Créer un utilisateur</h1>
+            </div>
+
+            <div class="column is-half is-offset-one-quarter">
+                {{ include('user/_form.html.twig') }}
+            </div>
+
+            <div class="column is-half is-offset-one-quarter">
+                <a href="{{ path('user_index') }}">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

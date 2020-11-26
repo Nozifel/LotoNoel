@@ -1,0 +1,63 @@
+{{ form_start(form) }}
+
+    {{ form_errors(form) }}
+
+    <div class="field">
+        {{ form_label(form.nom, 'Nom', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.nom, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.nom) }}
+        </p>
+    </div>
+
+    <div class="field">
+        <label for="date-picker" class="label">Dates</label>
+        <div class="control">
+            <input type="date" id="date-picker" class="input">
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.date_debut) }}
+            {{ form_errors(form.date_fin) }}
+        </p>
+    </div>
+
+    {{ form_widget(form.date_debut, {'attr': {'class': 'input is-hidden'}}) }}
+    {{ form_widget(form.date_fin, {'attr': {'class': 'input is-hidden'}}) }}
+
+    <div class="field">
+        {{ form_label(form.hauteur_grille, 'Hauteur de la grille', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.hauteur_grille, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.hauteur_grille) }}
+        </p>
+    </div>
+
+    <div class="field">
+        {{ form_label(form.largeur_grille, 'Largeur de la grille', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.largeur_grille, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.largeur_grille) }}
+        </p>
+    </div>
+
+    <div class="field">
+        {{ form_label(form.joueurs, 'Joueurs', {'label_attr': {'class': 'label'}}) }}
+        <div class="control">
+            {{ form_widget(form.joueurs, {'attr': {'class': 'input'}}) }}
+        </div>
+        <p class="help is-danger">
+            {{ form_errors(form.joueurs) }}
+        </p>
+    </div>
+
+    <button class="button is-primary">{{ button_label|default('Save') }}</button>
+
+    {{ form_widget(form._token) }}
+
+{{ form_end(form, {'render_rest': false}) }}

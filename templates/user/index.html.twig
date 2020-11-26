@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs liste{% endblock %}
+
+{% block body %}
+<section class="section">
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column is-full">
+                <h1 class="title">Utilisateurs</h1>
+            </div>
+
+            <div class="column is-full">
+                {% for user in users %}
+                    {{ include('user/card.html.twig') }}
+                {% endfor %}
+
+                <a href="{{ path('user_new') }}" class="button">Ajouter un nouveau</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
