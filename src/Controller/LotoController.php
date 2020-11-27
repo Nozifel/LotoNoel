@@ -62,10 +62,30 @@ class LotoController extends AbstractController
      */
     public function show(Loto $loto, TirageRepository $tirageRepository ): Response
     {
+        $tiragesJoueur = array();
         $tirages = array();
 
+        foreach( $loto->getJoueurs() as $key => $joueur )
+        {
+            $tirage = null;
+            if( $joueur->getId() != $this->getUser()->getId() ) {
+                $tirage = $tirageRepository->findBy(
+                    array(
+                        'loto' => $loto,
+                        'joueur' => $joueur
+                    ),
+                    array(
+                        'nombre' => 'ASC'
+                    )
+                );
+            }
+
+            if( $tirage )
+                array_push($tirages, $tirage );
+        }
+
         if( $loto->getJoueurs()->contains( $this->getUser() ) )
-            $tirages = $tirageRepository->findBy(
+            $tiragesJoueur = $tirageRepository->findBy(
                 array(
                     'loto' => $loto,
                     'joueur' => $this->getUser()
@@ -77,6 +97,7 @@ class LotoController extends AbstractController
 
         return $this->render('loto/show.html.twig', [
             'loto' => $loto,
+            'tiragesJoueur' => $tiragesJoueur,
             'tirages' => $tirages
         ]);
     }

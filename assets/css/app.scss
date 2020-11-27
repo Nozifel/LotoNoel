@@ -8,10 +8,13 @@
 
 body{
   &.dev{
+    margin-bottom: 88px;
     .navbar{
       bottom: 36px;
     }
   }
+
+  margin-bottom: 52px;
 }
 
 @-webkit-keyframes rotating /* Safari and Chrome */ {

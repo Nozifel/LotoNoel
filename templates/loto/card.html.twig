@@ -44,9 +44,6 @@
             </div>
         </div>
         <footer class="card-footer">
-            {% if loto.autoriserEditionGrilles and app.user in loto.joueurs %}
-                <a href="" class="card-footer-item">Ma grille</a>
-            {% endif %}
             {% if loto.tirages|length > 0 and app.user.id == loto.auteur.id and not loto.autoriserEditionGrilles %}
                 <a href="{{ path('loto_autoriser_edition_grilles', {'id': loto.id}) }}" class="card-footer-item autoriser-edition-grilles">Autoriser l'édition des grilles</a>
             {% endif %}

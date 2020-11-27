@@ -16,7 +16,7 @@
 
             {% if app.user in loto.joueurs %}
                 <div class="column is-full">
-                    <h3>Mes numéros</h3>
+                    <h3 class="title is-3">Mes numéros</h3>
                     {#<div id="liste-tirages">
                         {% if tirages %}
                             {% for tirage in tirages %}
@@ -26,22 +26,57 @@
                     </div>#}
                 </div>
                 <div class="column is-full">
-                    <div id="ma-grille">
-                        {% set count = 0 %}
-                        {% for i in 0..loto.hauteurGrille-1 %}
-                            <div class="ligne-grille">
-                                {% for j in 0..loto.largeurGrille-1 %}
-                                    <span class="tirage-grille is-sortable">
-                                        <span class="tirage has-background-danger">{{ tirages[ count ].nombre }}</span>
-                                        <input type="text" name="c[{{ i }}][{{ j }}]" id="{{ i }}-{{ j }}-{{ loto.id }}" value="">
-                                    </span>
-                                    {% set count = (count + 1) %}
-                                {% endfor %}
-                            </div>
-                        {% endfor %}
+                {% if tiragesJoueur %}
+                    <div class="box">
+                        <div id="ma-grille">
+                            {% set count = 0 %}
+                            {% for i in 0..loto.hauteurGrille-1 %}
+                                <div class="ligne-grille">
+                                    {% for j in 0..loto.largeurGrille-1 %}
+                                        <span class="tirage-grille is-sortable">
+                                            <span class="tirage has-background-danger">{{ tiragesJoueur[ count ].nombre }}</span>
+                                            <input type="text" name="c[{{ i }}][{{ j }}]" id="{{ i }}-{{ j }}-{{ loto.id }}" value="">
+                                        </span>
+                                        {% set count = (count + 1) %}
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
+                {% else %}
+                    <div class="box">Aucun numéros actuellement.</div>
+                {% endif %}
                 </div>
             {% endif %}
+
+            <div class="column is-full">
+                <h3 class="title is-3">Autres joueurs</h3>
+            </div>
+            {% for tirage in tirages %}
+                <div class="column is-one-third">
+                    <div class="box">
+                        <a class="has-text-centered mb-5 is-block" href="{{ path('user_show', {'id': tirage[0].joueur.id}) }}">{{ tirage[0].joueur.prenom }} {{ tirage[0].joueur.nom }}</a>
+                        {% if tirage %}
+                            <div class="grille-joueur">
+                                {% set count = 0 %}
+                                {% for i in 0..loto.hauteurGrille-1 %}
+                                    <div class="ligne-grille">
+                                        {% for j in 0..loto.largeurGrille-1 %}
+                                            <span class="tirage-grille">
+                                                    <span class="tirage has-background-danger">{{ tirage[ count ].nombre }}</span>
+                                                    <input type="text" name="c[{{ i }}][{{ j }}]" id="{{ i }}-{{ j }}-{{ loto.id }}" value="">
+                                                </span>
+                                            {% set count = (count + 1) %}
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="box">Aucun numéros actuellement.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
 
             <div class="column is-full">
                 <a href="{{ path('loto_index') }}" class="button">Retour à la liste</a>
