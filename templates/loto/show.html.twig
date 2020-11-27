@@ -64,7 +64,6 @@
                                         {% for j in 0..loto.largeurGrille-1 %}
                                             <span class="tirage-grille">
                                                     <span class="tirage has-background-danger">{{ tirage[ count ].nombre }}</span>
-                                                    <input type="text" name="c[{{ i }}][{{ j }}]" id="{{ i }}-{{ j }}-{{ loto.id }}" value="">
                                                 </span>
                                             {% set count = (count + 1) %}
                                         {% endfor %}
