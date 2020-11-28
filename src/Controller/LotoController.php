@@ -71,15 +71,27 @@ class LotoController extends AbstractController
         {
             $tirage = null;
             if( $joueur->getId() != $this->getUser()->getId() ) {
-                $tirage = $tirageRepository->findBy(
+
+                $grille = $grilleRepository->findOneBy(
                     array(
                         'loto' => $loto,
                         'joueur' => $joueur
-                    ),
-                    array(
-                        'nombre' => 'ASC'
                     )
                 );
+
+                if( !empty($grille) )
+                    $tirage = $grille;
+                else {
+                    $tirage = $tirageRepository->findBy(
+                        array(
+                            'loto' => $loto,
+                            'joueur' => $joueur
+                        ),
+                        array(
+                            'nombre' => 'ASC'
+                        )
+                    );
+                }
             }
 
             if( $tirage )
@@ -381,7 +393,7 @@ class LotoController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse(
-            ['message' => "Bravo."],
+            ['message' => "Votre grille a été enregistrée."],
             Response::HTTP_OK
         );
     }

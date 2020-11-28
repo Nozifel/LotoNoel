@@ -75,7 +75,11 @@
             {% for tirage in tirages %}
                 <div class="column is-one-third">
                     <div class="box">
-                        <a class="has-text-centered mb-5 is-block" href="{{ path('user_show', {'id': tirage[0].joueur.id}) }}">{{ tirage[0].joueur.prenom }} {{ tirage[0].joueur.nom }}</a>
+                        {% if tirage.grille is defined %}
+                            <a class="has-text-centered mb-5 is-block" href="{{ path('user_show', {'id': tirage.joueur.id}) }}">{{ tirage.joueur.prenom }} {{ tirage.joueur.nom }}</a>
+                        {% else %}
+                            <a class="has-text-centered mb-5 is-block" href="{{ path('user_show', {'id': tirage[0].joueur.id}) }}">{{ tirage[0].joueur.prenom }} {{ tirage[0].joueur.nom }}</a>
+                        {% endif %}
                         {% if tirage %}
                             <div class="grille-joueur">
                                 {% set count = 0 %}
@@ -83,8 +87,13 @@
                                     <div class="ligne-grille">
                                         {% for j in 0..loto.largeurGrille-1 %}
                                             <span class="tirage-grille">
-                                                    <span class="tirage has-background-danger">{{ tirage[ count ].nombre }}</span>
-                                                </span>
+                                                {% if tirage[ count ].nombre is defined %}
+                                                    {% set nombre = tirage[ count ].nombre %}
+                                                {% else %}
+                                                    {% set nombre = tirage.grille[ i ][ j ] %}
+                                                {% endif %}
+                                                <span class="tirage has-background-danger">{{ nombre }}</span>
+                                            </span>
                                             {% set count = (count + 1) %}
                                         {% endfor %}
                                     </div>
