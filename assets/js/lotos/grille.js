@@ -29,7 +29,7 @@ var containersSortable = $.merge(ids, sortableListe)
 var containersSwapable = $.merge( ids, draggableListe )
 
 const swappable = new Swappable(draggableListe, {
-    draggable: '.tirage',
+    draggable: '.tirage-sortable',
     /*mirror: {
         appendTo: '#ma-grille .tirage-grille',
         constrainDimensions: true,
