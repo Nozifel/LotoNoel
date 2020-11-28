@@ -3,8 +3,6 @@ $(document).on('change', '.type_combinaison', function(){
     var bloc = $(this).closest('form')
     var val = $(this).val()
 
-    console.log(val)
-
     bloc.find('[class^="choix"]').hide()
 
     switch (val) {

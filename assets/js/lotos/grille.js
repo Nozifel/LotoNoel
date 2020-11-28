@@ -9,18 +9,71 @@ var containersSortable = $.merge(ids, sortableListe)
 
 var containersSwapable = $.merge( ids, draggableListe )
 
-const Classes = {
-    draggable: 'StackedListItem--isDraggable',
-    capacity: 'draggable-container-parent--capacity',
-};
-
-const swappable = new Swappable(sortableListe, {
+const swappable = new Swappable(draggableListe, {
     draggable: '.tirage',
-    mirror: {
+    /*mirror: {
+        appendTo: '#ma-grille .tirage-grille',
         constrainDimensions: true,
     },
-    plugins: [Plugins.ResizeMirror],
+    plugins: [Plugins.ResizeMirror],*/
 });
+
+$(document).on('submit', '#update-grille', function(e){
+    e.preventDefault()
+
+    var numeros = [];
+
+    $('#ma-grille input').each(function(){
+        numeros.push( $(this).val() );
+    })
+
+    console.log(numeros);
+
+    $.ajax({
+        method: "POST",
+        url: $('#update-grille').attr('action'),
+        data: {
+            'numeros': numeros
+        }
+    })
+    .done(function( res, status, xhr ){
+        console;log(res)
+    })
+    .fail(function(res){
+        console.log(res)
+    });
+
+})
+
+/*var currentValue = '';
+var nextValue = '';
+
+var origine = '';
+var destination = '';
+
+
+swappable.on('swappable:start', (evt) => {
+    origine = evt.data.dragEvent.data
+})
+
+swappable.on('swappable:stop', (evt) => {
+
+    console.log( evt )
+
+    evt.data.dragEvent.data.originalSource.previousElementSibling.setAttribute('value', currentValue)
+    origine['firstElementChild'].setAttribute('value', nextValue)
+})
+
+swappable.on('swappable:swapped', (evt) => {
+    destination = evt.data.dragEvent.data
+    var currentValue = evt.data.dragEvent.data.originalSource.innerText;
+    var nextValue = evt.data.dragEvent.data.over.innerText
+
+    console.log( evt )
+
+    evt.data.dragEvent.data.sourceContainer.previousElementSibling.setAttribute('value', nextValue)
+    evt.data.dragEvent.data.overContainer.previousElementSibling.setAttribute('value', currentValue)
+});*/
 
 /*const sortable = new Sortable(containersSortable, {
     draggable: '.tirage',

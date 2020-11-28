@@ -28,20 +28,40 @@
                 <div class="column is-full">
                 {% if tiragesJoueur %}
                     <div class="box">
+                        {% if loto.autoriserEditionGrilles %}
+                            <form action="{{ path('grille_update', {'id': loto.id}) }}" method="POST" id="update-grille">
+                        {% endif %}
                         <div id="ma-grille">
                             {% set count = 0 %}
                             {% for i in 0..loto.hauteurGrille-1 %}
                                 <div class="ligne-grille">
                                     {% for j in 0..loto.largeurGrille-1 %}
-                                        <span class="tirage-grille is-sortable">
-                                            <span class="tirage has-background-danger">{{ tiragesJoueur[ count ].nombre }}</span>
-                                            <input type="text" name="c[{{ i }}][{{ j }}]" id="{{ i }}-{{ j }}-{{ loto.id }}" value="">
+                                        {% if tiragesJoueur[ count ].nombre is defined %}
+                                            {% set nombre = tiragesJoueur[ count ].nombre %}
+                                        {% else %}
+                                            {% set nombre = tiragesJoueur[ i ][ j ] %}
+                                        {% endif %}
+                                        <span class="tirage-grille">
+                                            <span class="tirage has-background-danger  is-sortable">
+                                               {{ nombre }}
+                                                <input
+                                                        type="text"
+                                                        name="c[{{ i }}][{{ j }}]" id="{{ i }}-{{ j }}-{{ loto.id }}"
+                                                        value="{{ nombre }}"
+                                                        class="input-tirage">
+                                            </span>
                                         </span>
                                         {% set count = (count + 1) %}
                                     {% endfor %}
                                 </div>
                             {% endfor %}
                         </div>
+                        {% if loto.autoriserEditionGrilles %}
+                            <div class="buttons is-right">
+                                <button class="button is-primary is-right">{{ button_label|default('Enregistrer') }}</button>
+                            </div>
+                            </form>
+                        {% endif %}
                     </div>
                 {% else %}
                     <div class="box">Aucun numéros actuellement.</div>

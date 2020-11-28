@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Combinaison;
+use App\Entity\Grille;
 use App\Entity\Loto;
 use App\Entity\Tirage;
 use App\Form\LotoType;
+use App\Repository\GrilleRepository;
 use App\Repository\LotoRepository;
 use App\Repository\TirageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -60,7 +62,7 @@ class LotoController extends AbstractController
     /**
      * @Route("/{id}", name="loto_show", methods={"GET"})
      */
-    public function show(Loto $loto, TirageRepository $tirageRepository ): Response
+    public function show(Loto $loto, TirageRepository $tirageRepository, GrilleRepository $grilleRepository ): Response
     {
         $tiragesJoueur = array();
         $tirages = array();
@@ -84,16 +86,28 @@ class LotoController extends AbstractController
                 array_push($tirages, $tirage );
         }
 
-        if( $loto->getJoueurs()->contains( $this->getUser() ) )
-            $tiragesJoueur = $tirageRepository->findBy(
-                array(
-                    'loto' => $loto,
-                    'joueur' => $this->getUser()
-                ),
-                array(
-                    'nombre' => 'ASC'
-                )
-            );
+        $grille = $grilleRepository->findOneBy(
+            array(
+                'loto' => $loto,
+                'joueur' => $this->getUser()
+            )
+        );
+
+        if( empty($grille) ) {
+            if ($loto->getJoueurs()->contains($this->getUser()))
+                $tiragesJoueur = $tirageRepository->findBy(
+                    array(
+                        'loto' => $loto,
+                        'joueur' => $this->getUser()
+                    ),
+                    array(
+                        'nombre' => 'ASC'
+                    )
+                );
+        }
+        else{
+            $tiragesJoueur = $grille->getGrille();
+        }
 
         return $this->render('loto/show.html.twig', [
             'loto' => $loto,
@@ -298,5 +312,77 @@ class LotoController extends AbstractController
         return $this->render('loto/card.html.twig', [
             'loto' => $loto
         ]);
+    }
+
+    /**
+     * @Route("/{id}/grille", name="grille_update", methods={"POST"})
+     */
+    public function updateGrille(Request $request, Loto $loto, TirageRepository $tirageRepository, GrilleRepository $grilleRepository): Response
+    {
+        $joueur = $this->getUser();
+
+        $grille = $grilleRepository->findOneBy(
+           array(
+               'loto' => $loto,
+               'joueur' => $joueur
+           )
+        );
+
+        if( empty($grille) )
+            $grille = new Grille();
+
+        $datas = $request->get('numeros');
+
+        $tiragesJoueur = $tirageRepository->findBy(
+            array(
+                'loto' => $loto,
+                'joueur' => $joueur
+            ),
+            array(
+                'nombre' => 'ASC'
+            )
+        );
+
+        $_datas = $datas;
+        sort($_datas);
+
+        $listeRepo = array();
+
+        foreach( $tiragesJoueur as $key => $tirageJoueur )
+            array_push($listeRepo, $tirageJoueur->getNombre() );
+
+        if( $_datas != $listeRepo )
+            return new JsonResponse(
+                ['message' => "Certains numéros ne vous appartiennent pas."],
+                Response::HTTP_FORBIDDEN
+            );
+
+        $largeur = $loto->getLargeurGrille();
+
+        $tableau = array();
+
+        $tmp = array();
+        foreach( $datas as $key => $data )
+        {
+            array_push($tmp, $data);
+
+            if( ($key+1) % $largeur == 0 ) {
+                array_push($tableau, $tmp);
+                $tmp = array();
+            }
+        }
+
+        $grille->setLoto($loto);
+        $grille->setJoueur( $joueur );
+        $grille->setGrille( $tableau );
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($grille);
+        $entityManager->flush();
+
+        return new JsonResponse(
+            ['message' => "Bravo."],
+            Response::HTTP_OK
+        );
     }
 }
