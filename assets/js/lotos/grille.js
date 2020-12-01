@@ -46,8 +46,6 @@ $(document).on('submit', '#update-grille', function(e){
         numeros.push( $(this).val() );
     })
 
-    console.log(numeros);
-
     $.ajax({
         method: "POST",
         url: $('#update-grille').attr('action'),

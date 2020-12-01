@@ -14,6 +14,20 @@
                 {{ include('loto/card.html.twig') }}
             </div>
 
+            {% if date(loto.dateDebut) <= date() %}
+                <div class="column isfull">
+                    <h3 class="title is-3">Tirages</h3>
+                    <div class="box">
+                        {% for jour in listeJoursTirage %}
+                            {{ date(jour.date)|format_date(pattern='d MMMM Y') }}
+                            <span class="tag is-primary is-medium">
+                                {{ jour.nombres|join(', ') }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
             {% if app.user in loto.joueurs %}
                 <div class="column is-full">
                     <h3 class="title is-3">Mes numéros</h3>

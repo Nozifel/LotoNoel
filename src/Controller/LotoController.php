@@ -70,10 +70,18 @@ class LotoController extends AbstractController
         $_nombresTires = $tirageRepository->findNombreTires( $loto );
         $nombresTires = array();
 
+        $listeJoursTirage = array();
+
         if( !empty($_nombresTires) )
         {
-            foreach ( $_nombresTires as $key => $_nombreTire )
-                array_push($nombresTires, $_nombreTire['nombre'] );
+            foreach ( $_nombresTires as $key => $_nombreTire ) {
+                array_push($nombresTires, $_nombreTire['nombre']);
+
+                if( !array_key_exists($_nombreTire['dateTirage']->format('Y-m-d'), $listeJoursTirage) )
+                    $listeJoursTirage[ $_nombreTire['dateTirage']->format('Y-m-d') ] = array('nombres' => array(), 'date' => $_nombreTire['dateTirage']->format('Y-m-d') );
+
+                array_push($listeJoursTirage[ $_nombreTire['dateTirage']->format('Y-m-d') ]['nombres'], $_nombreTire['nombre']);
+            }
         }
 
         foreach( $loto->getJoueurs() as $key => $joueur )
@@ -134,7 +142,8 @@ class LotoController extends AbstractController
             'loto' => $loto,
             'tiragesJoueur' => $tiragesJoueur,
             'tirages' => $tirages,
-            'nombresTires' => $nombresTires
+            'nombresTires' => $nombresTires,
+            'listeJoursTirage' => $listeJoursTirage
         ]);
     }
 
@@ -421,10 +430,13 @@ class LotoController extends AbstractController
      */
     public function tirageDuJour( Request $request, Loto $loto, TirageRepository $tirageRepository )
     {
+        if( $loto->getAuteur()->getId() != $this->getUser()->getId() )
+            throw $this->createNotFoundException('Page non trouvée !');
+
         $tirageParJour = $loto->getTiragesParJour();
 
-        /*print_r(\DateTime::createFromFormat('U.u', microtime(TRUE)));
-        die();*/
+        $totalTire = $tirageRepository->findNombreTires( $loto );
+        $totalTire = count($totalTire);
 
         $now = new \DateTime();
 
@@ -441,10 +453,11 @@ class LotoController extends AbstractController
             if( $nombreTires < $tirageParJour ) {
                 $tirage = $tirageRepository->randomTirage($loto->getId());
 
+                $totalTire = $totalTire+1;
+
                 if (isset($tirage[0])) {
-                    //$tirage[0]->setDateTirage(new \DateTime());
-                    print_r(\DateTime::createFromFormat('U.u', microtime(TRUE)));
                     $tirage[0]->setDateTirage( \DateTime::createFromFormat('U.u', microtime(TRUE)) );
+                    $tirage[0]->setOrdre( $totalTire );
 
                     $entityManager = $this->getDoctrine()->getManager();
                     $entityManager->persist($tirage[0]);

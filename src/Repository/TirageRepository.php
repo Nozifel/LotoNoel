@@ -40,10 +40,11 @@ class TirageRepository extends ServiceEntityRepository
     public function findNombreTires( Loto $loto )
     {
         return $this->createQueryBuilder('t')
-            ->select('t.nombre')
+            //->select('t.nombre')
             ->where('t.dateTirage IS NOT NULL')
             ->andWhere('t.loto = :loto')
             ->setParameter('loto', $loto)
+            ->orderBy('t.ordre', 'ASC')
             ->getQuery()
             ->getArrayResult();
     }
@@ -57,6 +58,7 @@ class TirageRepository extends ServiceEntityRepository
             ->setParameter('debut', $debut)
             ->setParameter('fin', $fin)
             ->setParameter('loto', $loto)
+            ->orderBy('t.ordre', 'ASC')
             ->getQuery()
             ->getResult();
     }

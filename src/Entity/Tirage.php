@@ -25,7 +25,7 @@ class Tirage
     private $nombre;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true, options={"format"="Y-m-d H:i:s.u"})
+     * @ORM\Column(type="date", nullable=true)
      */
     private $dateTirage;
 
@@ -39,6 +39,11 @@ class Tirage
      * @ORM\ManyToOne(targetEntity=User::class)
      */
     private $joueur;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $ordre;
 
     public function __construct()
     {
@@ -101,5 +106,17 @@ class Tirage
     public function __toString(): string
     {
         return $this->nombre;
+    }
+
+    public function getOrdre(): ?int
+    {
+        return $this->ordre;
+    }
+
+    public function setOrdre(?int $ordre): self
+    {
+        $this->ordre = $ordre;
+
+        return $this;
     }
 }
