@@ -42,7 +42,7 @@
                                             {% set nombre = tiragesJoueur[ i ][ j ] %}
                                         {% endif %}
                                         <span class="tirage-grille">
-                                            <span class="tirage has-background-danger  is-sortable tirage-sortable">
+                                            <span class="tirage is-sortable tirage-sortable {{ nombre in nombresTires ? 'has-background-success' : 'has-background-danger' }}">
                                                {{ nombre }}
                                                 <input
                                                         type="text"
@@ -92,7 +92,7 @@
                                                 {% else %}
                                                     {% set nombre = tirage.grille[ i ][ j ] %}
                                                 {% endif %}
-                                                <span class="tirage has-background-danger">{{ nombre }}</span>
+                                                <span class="tirage {{ nombre in nombresTires ? 'has-background-success' : 'has-background-danger' }}">{{ nombre }}</span>
                                             </span>
                                             {% set count = (count + 1) %}
                                         {% endfor %}

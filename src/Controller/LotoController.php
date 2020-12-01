@@ -67,6 +67,15 @@ class LotoController extends AbstractController
         $tiragesJoueur = array();
         $tirages = array();
 
+        $_nombresTires = $tirageRepository->findNombreTires( $loto );
+        $nombresTires = array();
+
+        if( !empty($_nombresTires) )
+        {
+            foreach ( $_nombresTires as $key => $_nombreTire )
+                array_push($nombresTires, $_nombreTire['nombre'] );
+        }
+
         foreach( $loto->getJoueurs() as $key => $joueur )
         {
             $tirage = null;
@@ -124,7 +133,8 @@ class LotoController extends AbstractController
         return $this->render('loto/show.html.twig', [
             'loto' => $loto,
             'tiragesJoueur' => $tiragesJoueur,
-            'tirages' => $tirages
+            'tirages' => $tirages,
+            'nombresTires' => $nombresTires
         ]);
     }
 
@@ -331,6 +341,14 @@ class LotoController extends AbstractController
      */
     public function updateGrille(Request $request, Loto $loto, TirageRepository $tirageRepository, GrilleRepository $grilleRepository): Response
     {
+        $now = new \DateTime();
+
+        if( $now >= $loto->getDateDebut() )
+            return new JsonResponse(
+                ['message' => "Le loto a déjà commencé. Vous ne pouvez plus modifier votre grille."],
+                Response::HTTP_OK
+            );
+
         $joueur = $this->getUser();
 
         $grille = $grilleRepository->findOneBy(
@@ -391,6 +409,49 @@ class LotoController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($grille);
         $entityManager->flush();
+
+        return new JsonResponse(
+            ['message' => "Votre grille a été enregistrée."],
+            Response::HTTP_OK
+        );
+    }
+
+    /**
+     * @Route("/{id}/tirage", name="tirage", methods={"GET"})
+     */
+    public function tirageDuJour( Request $request, Loto $loto, TirageRepository $tirageRepository )
+    {
+        $tirageParJour = $loto->getTiragesParJour();
+
+        /*print_r(\DateTime::createFromFormat('U.u', microtime(TRUE)));
+        die();*/
+
+        $now = new \DateTime();
+
+        $debut = new \DateTime();
+        $debut->setTime(0, 0, 0, 0);
+        $fin  = new \DateTime();
+        $fin->setTime(23, 59,59);
+
+        do{
+            $nombreTires = $tirageRepository->nombreDuJour($debut, $fin, $loto);
+
+            $nombreTires = count( $nombreTires );
+
+            if( $nombreTires < $tirageParJour ) {
+                $tirage = $tirageRepository->randomTirage($loto->getId());
+
+                if (isset($tirage[0])) {
+                    //$tirage[0]->setDateTirage(new \DateTime());
+                    print_r(\DateTime::createFromFormat('U.u', microtime(TRUE)));
+                    $tirage[0]->setDateTirage( \DateTime::createFromFormat('U.u', microtime(TRUE)) );
+
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($tirage[0]);
+                    $entityManager->flush();
+                }
+            }
+        }while( $nombreTires < $tirageParJour );
 
         return new JsonResponse(
             ['message' => "Votre grille a été enregistrée."],

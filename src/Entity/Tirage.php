@@ -25,7 +25,7 @@ class Tirage
     private $nombre;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true, options={"format"="Y-m-d H:i:s.u"})
      */
     private $dateTirage;
 
