@@ -20,9 +20,11 @@
                     <div class="box">
                         {% for jour in listeJoursTirage %}
                             {{ date(jour.date)|format_date(pattern='d MMMM Y') }}
-                            <span class="tag is-primary is-medium">
-                                {{ jour.nombres|join(', ') }}
-                            </span>
+                            {% for nb in jour.nombres %}
+                                <span class="tag is-link is-medium">
+                                    {{ nb }}
+                                </span>
+                            {% endfor %}
                         {% endfor %}
                     </div>
                 </div>
