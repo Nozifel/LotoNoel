@@ -19,12 +19,14 @@
                     <h3 class="title is-3">Tirages</h3>
                     <div class="box">
                         {% for jour in listeJoursTirage %}
+                            <div class="jour-tirage">
                             {{ date(jour.date)|format_date(pattern='d MMMM Y') }}
                             {% for nb in jour.nombres %}
                                 <span class="tag is-link is-medium">
                                     {{ nb }}
                                 </span>
                             {% endfor %}
+                            </div>
                         {% endfor %}
                     </div>
                 </div>
