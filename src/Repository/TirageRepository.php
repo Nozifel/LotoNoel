@@ -50,14 +50,12 @@ class TirageRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function nombreDuJour( DateTime $debut, DateTime $fin, Loto $loto )
+    public function nombreDuJour( DateTime $date, Loto $loto )
     {
         return $this->createQueryBuilder('t')
-            ->where('t.dateTirage >= :debut')
-            ->andWhere('t.dateTirage <= :fin')
+            ->where('t.dateTirage = :date')
             ->andWhere('t.loto = :loto')
-            ->setParameter('debut', $debut)
-            ->setParameter('fin', $fin)
+            ->setParameter('date', $date->format('Y-m-d'))
             ->setParameter('loto', $loto)
             ->orderBy('t.ordre', 'ASC')
             ->getQuery()

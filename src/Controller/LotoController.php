@@ -440,13 +440,13 @@ class LotoController extends AbstractController
 
         $now = new \DateTime();
 
-        $debut = new \DateTime();
-        $debut->setTime(0, 0, 0, 0);
+        $date = new \DateTime();
+        /*$debut->setTime(0, 0, 0, 0);
         $fin  = new \DateTime();
-        $fin->setTime(23, 59,59);
+        $fin->setTime(23, 59,59);*/
 
         do{
-            $nombreTires = $tirageRepository->nombreDuJour($debut, $fin, $loto);
+            $nombreTires = $tirageRepository->nombreDuJour($date, $loto);
 
             $nombreTires = count( $nombreTires );
 
