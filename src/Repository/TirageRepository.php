@@ -6,6 +6,7 @@ use App\Entity\Loto;
 use App\Entity\Tirage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use \DateTime;
 
 /**
  * @method Tirage|null find($id, $lockMode = null, $lockVersion = null)
@@ -49,7 +50,7 @@ class TirageRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
-    public function nombreDuJour( \DateTime $debut, \DateTime $fin, Loto $loto )
+    public function nombreDuJour( DateTime $debut, DateTime $fin, Loto $loto )
     {
         return $this->createQueryBuilder('t')
             ->where('t.dateTirage >= :debut')
