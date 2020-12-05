@@ -22,9 +22,9 @@
                             <div class="jour-tirage">
                             {{ date(jour.date)|format_date(pattern='d MMMM Y') }}
                             {% for nb in jour.nombres %}
-                                <span class="tag is-link is-medium">
+                                <a class="tag is-link is-medium {{ nb in nombresGagnant ? 'nombre-gagnant' : '' }}" href="#nombre-{{ nb }}">
                                     {{ nb }}
-                                </span>
+                                </a>
                             {% endfor %}
                             </div>
                         {% endfor %}
@@ -60,7 +60,7 @@
                                             {% set nombre = tiragesJoueur[ i ][ j ] %}
                                         {% endif %}
                                         <span class="tirage-grille">
-                                            <span class="tirage is-sortable tirage-sortable {{ nombre in nombresTires ? 'has-background-success' : 'has-background-danger' }}">
+                                            <span class="tirage is-sortable tirage-sortable has-background-{{ ( listeJoursTirage|last.nombres is defined and nombre in listeJoursTirage|last.nombres ) ? 'link' : ( nombre in nombresTires ? 'success' : 'danger' ) }}" id="nombre-{{ nombre }}">
                                                {{ nombre }}
                                                 <input
                                                         type="text"
@@ -110,7 +110,9 @@
                                                 {% else %}
                                                     {% set nombre = tirage.grille[ i ][ j ] %}
                                                 {% endif %}
-                                                <span class="tirage {{ nombre in nombresTires ? 'has-background-success' : 'has-background-danger' }}">{{ nombre }}</span>
+                                                <span class="tirage has-background-{{ ( listeJoursTirage|last.nombres is defined and nombre in listeJoursTirage|last.nombres ) ? 'link' : ( nombre in nombresTires ? 'success' : 'danger' ) }}" id="nombre-{{ nombre }}">
+                                                    {{ nombre }}
+                                                </span>
                                             </span>
                                             {% set count = (count + 1) %}
                                         {% endfor %}

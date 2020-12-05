@@ -61,6 +61,7 @@ class Loto
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="lotos")
+     * @ORM\OrderBy({"prenom" = "ASC"})
      *
      * @Assert\NotNull
      */

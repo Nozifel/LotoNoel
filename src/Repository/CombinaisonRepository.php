@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Combinaison;
+use App\Entity\Loto;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,16 @@ class CombinaisonRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Combinaison::class);
+    }
+
+    public function findCombinaisonsRestantes( Loto $loto )
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.gagnant IS NULL')
+            ->andWhere('c.loto = :loto')
+            ->setParameter('loto', $loto)
+            ->getQuery()
+            ->getResult();
     }
 
     // /**

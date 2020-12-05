@@ -6,7 +6,9 @@ use App\Entity\Combinaison;
 use App\Entity\Grille;
 use App\Entity\Loto;
 use App\Entity\Tirage;
+use App\Entity\User;
 use App\Form\LotoType;
+use App\Repository\CombinaisonRepository;
 use App\Repository\GrilleRepository;
 use App\Repository\LotoRepository;
 use App\Repository\TirageRepository;
@@ -68,19 +70,27 @@ class LotoController extends AbstractController
         $tirages = array();
 
         $_nombresTires = $tirageRepository->findNombreTires( $loto );
+
         $nombresTires = array();
+
+        $nombresGagnant = array();
 
         $listeJoursTirage = array();
 
         if( !empty($_nombresTires) )
         {
             foreach ( $_nombresTires as $key => $_nombreTire ) {
-                array_push($nombresTires, $_nombreTire['nombre']);
+                array_push($nombresTires, $_nombreTire->getNombre());
 
-                if( !array_key_exists($_nombreTire['dateTirage']->format('Y-m-d'), $listeJoursTirage) )
-                    $listeJoursTirage[ $_nombreTire['dateTirage']->format('Y-m-d') ] = array('nombres' => array(), 'date' => $_nombreTire['dateTirage']->format('Y-m-d') );
+                if( $_nombreTire->getCombinaison() ) array_push($nombresGagnant, $_nombreTire->getNombre());
 
-                array_push($listeJoursTirage[ $_nombreTire['dateTirage']->format('Y-m-d') ]['nombres'], $_nombreTire['nombre']);
+                if( !array_key_exists($_nombreTire->getDateTirage()->format('Y-m-d'), $listeJoursTirage) )
+                    $listeJoursTirage[ $_nombreTire->getDateTirage()->format('Y-m-d') ] = array('nombres' => array(), 'date' => $_nombreTire->getDateTirage()->format('Y-m-d') );
+
+                array_push(
+                    $listeJoursTirage[ $_nombreTire->getDateTirage()->format('Y-m-d') ]['nombres'],
+                    $_nombreTire->getNombre()
+                );
             }
         }
 
@@ -143,7 +153,8 @@ class LotoController extends AbstractController
             'tiragesJoueur' => $tiragesJoueur,
             'tirages' => $tirages,
             'nombresTires' => $nombresTires,
-            'listeJoursTirage' => $listeJoursTirage
+            'listeJoursTirage' => $listeJoursTirage,
+            'nombresGagnant' => $nombresGagnant
         ]);
     }
 
@@ -309,6 +320,11 @@ class LotoController extends AbstractController
                 $combinaison->setType( 'numero' );
                 $combinaison->setNumero( $datas['numero'] );
                 break;
+
+            case 'ordre':
+                $combinaison->setType( 'ordre' );
+                $combinaison->setNumero( $datas['ordre'] );
+                break;
         }
 
 
@@ -438,12 +454,8 @@ class LotoController extends AbstractController
         $totalTire = $tirageRepository->findNombreTires( $loto );
         $totalTire = count($totalTire);
 
-        $now = new \DateTime();
-
         $date = new \DateTime();
-        /*$debut->setTime(0, 0, 0, 0);
-        $fin  = new \DateTime();
-        $fin->setTime(23, 59,59);*/
+        //$date->modify('+25 day');
 
         do{
             $nombreTires = $tirageRepository->nombreDuJour($date, $loto);
@@ -456,12 +468,15 @@ class LotoController extends AbstractController
                 $totalTire = $totalTire+1;
 
                 if (isset($tirage[0])) {
-                    $tirage[0]->setDateTirage( \DateTime::createFromFormat('U.u', microtime(TRUE)) );
-                    $tirage[0]->setOrdre( $totalTire );
+                    $currentTirage = $tirage[0];
+                    $currentTirage->setDateTirage( $date );
+                    $currentTirage->setOrdre( $totalTire );
 
                     $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->persist($tirage[0]);
+                    $entityManager->persist($currentTirage);
                     $entityManager->flush();
+
+                    $this->findCombinaisons( $loto, $currentTirage );
                 }
             }
         }while( $nombreTires < $tirageParJour );
@@ -470,5 +485,208 @@ class LotoController extends AbstractController
             ['message' => "Votre grille a été enregistrée."],
             Response::HTTP_OK
         );
+    }
+
+    private function findCombinaisons( Loto $loto, Tirage $tirage )
+    {
+        $combinaisonRepository = $this->getDoctrine()->getRepository(Combinaison::class);
+        $combinaisons = $combinaisonRepository->findCombinaisonsRestantes( $loto );
+
+        foreach ( $combinaisons as $key =>  $combinaison )
+        {
+            switch ( $combinaison->getType() )
+            {
+                case 'ligne':
+                    $this->findLigne( $loto, $combinaison, $tirage );
+                    break;
+
+                case 'colonne':
+                    $this->findColonne( $loto, $combinaison, $tirage );
+                    break;
+
+                case 'ordre':
+                    $this->findOrdreNumero( $loto, $combinaison, $tirage );
+                    break;
+
+                case 'numero':
+                    $this->findNombreNumero( $loto, $combinaison, $tirage );
+                    break;
+
+                case 'combinaison':
+                    $this->findCombinaison( $loto, $combinaison, $tirage );
+                    break;
+            }
+        }
+    }
+
+    private function findLigne( Loto $loto, Combinaison $combinaison, Tirage $tirage )
+    {
+        $joueur = $tirage->getJoueur();
+
+        $grilleRepository = $this->getDoctrine()->getRepository(Grille::class);
+        $tirageRepository = $this->getDoctrine()->getRepository(Tirage::class);
+
+        $_nombresTires = $tirageRepository->findNombreTiresArray( $loto );
+
+        $nombresTires = array();
+
+        foreach ($_nombresTires as $key => $nombreTire )
+            array_push( $nombresTires, $nombreTire['nombre']);
+
+        $grille = $grilleRepository->findOneBy(
+            array(
+                'loto' => $loto,
+                'joueur' => $joueur
+            )
+        );
+
+        for( $i = 0; $i < $loto->getLargeurGrille(); $i++ )
+        {
+            $estColonne = true;
+
+            for( $j = 0; $j < $loto->getHauteurGrille(); $j++ )
+            {
+                if( !in_array($grille->getGrille()[ $i ][ $j ], $nombresTires ) )
+                    $estColonne = false;
+            }
+
+            if( $estColonne )
+                break;
+        }
+
+        if( $estColonne )
+        {
+            $combinaison->setGagnant( $joueur );
+            $tirage->setCombinaison( $combinaison );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($combinaison);
+            $entityManager->persist($tirage);
+            $entityManager->flush();
+        }
+    }
+
+    private function findColonne( Loto $loto, Combinaison $combinaison, Tirage $tirage )
+    {
+        $joueur = $tirage->getJoueur();
+
+        $grilleRepository = $this->getDoctrine()->getRepository(Grille::class);
+        $tirageRepository = $this->getDoctrine()->getRepository(Tirage::class);
+
+        $_nombresTires = $tirageRepository->findNombreTiresArray( $loto );
+
+        $nombresTires = array();
+
+        foreach ($_nombresTires as $key => $nombreTire )
+            array_push( $nombresTires, $nombreTire['nombre']);
+
+        $grille = $grilleRepository->findOneBy(
+            array(
+                'loto' => $loto,
+                'joueur' => $joueur
+            )
+        );
+
+        for( $i = 0; $i < $loto->getLargeurGrille(); $i++ )
+        {
+            $estColonne = true;
+
+            for( $j = 0; $j < $loto->getHauteurGrille(); $j++ )
+            {
+                if( !in_array($grille->getGrille()[ $j ][ $i ], $nombresTires ) )
+                    $estColonne = false;
+            }
+
+            if( $estColonne )
+                break;
+        }
+
+        if( $estColonne )
+        {
+            $combinaison->setGagnant( $joueur );
+            $tirage->setCombinaison( $combinaison );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($combinaison);
+            $entityManager->persist($tirage);
+            $entityManager->flush();
+        }
+    }
+
+    private function findNombreNumero( Loto $loto, Combinaison $combinaison, Tirage $tirage )
+    {
+        $tirageRepository = $this->getDoctrine()->getRepository(Tirage::class);
+        $nbNumeros = $tirageRepository->findNombreTiresJoueur( $loto, $tirage->getJoueur() );
+
+        $nbNumeros = count( $nbNumeros );
+
+        if( $nbNumeros == $combinaison->getNumero() )
+        {
+            $combinaison->setGagnant( $tirage->getJoueur() );
+            $tirage->setCombinaison( $combinaison );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($combinaison);
+            $entityManager->persist($tirage);
+            $entityManager->flush();
+        }
+    }
+
+    private function findCombinaison( Loto $loto, Combinaison $combinaison, Tirage $tirage )
+    {
+        $joueur = $tirage->getJoueur();
+
+        $grilleRepository = $this->getDoctrine()->getRepository(Grille::class);
+        $tirageRepository = $this->getDoctrine()->getRepository(Tirage::class);
+
+        $_nombresTires = $tirageRepository->findNombreTiresArray( $loto );
+
+        $nombresTires = array();
+
+        foreach ($_nombresTires as $key => $nombreTire )
+            array_push( $nombresTires, $nombreTire['nombre']);
+
+        $grille = $grilleRepository->findOneBy(
+            array(
+                'loto' => $loto,
+                'joueur' => $joueur
+            )
+        );
+
+        $combinaisonOk = true;
+
+        foreach ( $combinaison->getPattern() as $i => $ligne )
+        {
+            foreach ( $ligne as $j => $numero )
+            {
+                if( !in_array($grille->getGrille()[ $i ][ $j ], $nombresTires ) )
+                    $combinaisonOk = false;
+            }
+        }
+
+        if( $combinaisonOk )
+        {
+            $combinaison->setGagnant( $joueur );
+            $tirage->setCombinaison( $combinaison );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($combinaison);
+            $entityManager->persist($tirage);
+            $entityManager->flush();
+        }
+    }
+
+    private function findOrdreNumero( Loto $loto, Combinaison $combinaison, Tirage $tirage )
+    {
+        if( $tirage->getOrdre() == $combinaison->getNumero() )
+        {
+            $combinaison->setGagnant( $tirage->getJoueur() );
+            $tirage->setCombinaison( $combinaison );
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($combinaison);
+            $entityManager->persist($tirage);
+            $entityManager->flush();
+        }
     }
 }

@@ -45,6 +45,11 @@ class Tirage
      */
     private $ordre;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Combinaison::class, inversedBy="tirages")
+     */
+    private $combinaison;
+
     public function __construct()
     {
         $this->loto = new ArrayCollection();
@@ -116,6 +121,18 @@ class Tirage
     public function setOrdre(?int $ordre): self
     {
         $this->ordre = $ordre;
+
+        return $this;
+    }
+
+    public function getCombinaison(): ?Combinaison
+    {
+        return $this->combinaison;
+    }
+
+    public function setCombinaison(?Combinaison $combinaison): self
+    {
+        $this->combinaison = $combinaison;
 
         return $this;
     }

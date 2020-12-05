@@ -7,6 +7,7 @@
             <option value="1_ligne">1 ligne</option>
             <option value="1_colonne">1 colonne</option>
             <option value="numero">Numéro X de sa grille</option>
+            <option value="ordre">Numéro X du loto</option>
             <option value="combinaison">Combinaison de grille</option>
         </select>
 
@@ -29,6 +30,10 @@
 
         <div class="choix-numero">
             <input type="number" name="numero" class="input mt-5" placeholder="Numéro X de sa grille">
+        </div>
+
+        <div class="choix-ordre">
+            <input type="number" name="ordre" class="input mt-5" placeholder="Numéro X du loto">
         </div>
 
         <a class="add-combinaison is-block mt-5 has-text-white button is-link" data-bloc-loto="#card-loto-{{ loto.id }}">Ajouter</a>

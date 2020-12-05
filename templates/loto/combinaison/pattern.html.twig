@@ -21,13 +21,23 @@
 
      <div class="description-combinaison">1 Ligne</div>
 
-{% elseif combinaison.type ==  'numero' %}
+ {% elseif combinaison.type ==  'numero' %}
+
+     <div class="description-combinaison">{{ combinaison.numero }} numéro(s)</div>
+
+{% elseif combinaison.type ==  'ordre' %}
 
     <div class="description-combinaison">Le {{ suffix(combinaison.numero) }} numéro</div>
 
 {% endif %}
 
+    {% if combinaison.gagnant %}
+        <button class="button is-link is-small mt-3 is-fullwidth">
+            {{ combinaison.gagnant.prenom }} {{ combinaison.gagnant.nom }}
+        </button>
+    {% else %}
     <button class="button is-danger is-light is-small mt-3 delete-combinaison show-modal is-fullwidth" data-combinaison-id="{{ combinaison.id }}" data-target=".modal-delete-combinaison-{{ loto.id }}">
         <span class="mdi mdi-trash-can-outline"></span>
     </button>
+    {% endif %}
 </div>

@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Loto;
 use App\Entity\Tirage;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use \DateTime;
@@ -41,13 +42,38 @@ class TirageRepository extends ServiceEntityRepository
     public function findNombreTires( Loto $loto )
     {
         return $this->createQueryBuilder('t')
-            //->select('t.nombre')
             ->where('t.dateTirage IS NOT NULL')
             ->andWhere('t.loto = :loto')
             ->setParameter('loto', $loto)
             ->orderBy('t.ordre', 'ASC')
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
+    }
+
+    public function findNombreTiresArray( Loto $loto )
+    {
+        return $this->createQueryBuilder('t')
+            ->select('t.nombre')
+            ->where('t.dateTirage IS NOT NULL')
+            ->andWhere('t.loto = :loto')
+            ->setParameter('loto', $loto)
+            ->orderBy('t.ordre', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findNombreTiresJoueur( Loto $loto, User $joueur )
+    {
+        return $this->createQueryBuilder('t')
+            //->select('t.nombre')
+            ->where('t.dateTirage IS NOT NULL')
+            ->andWhere('t.joueur = :joueur')
+            ->andWhere('t.loto = :loto')
+            ->setParameter('loto', $loto)
+            ->setParameter('joueur', $joueur)
+            ->orderBy('t.ordre', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 
     public function nombreDuJour( DateTime $date, Loto $loto )

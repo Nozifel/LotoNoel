@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CombinaisonRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,7 +30,7 @@ class Combinaison
     private $special;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=User::class, cascade={"persist", "remove"})
      */
     private $gagnant;
 
@@ -52,6 +54,16 @@ class Combinaison
      * @ORM\Column(type="string", length=255)
      */
     private $type;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Tirage::class, mappedBy="combinaison")
+     */
+    private $tirages;
+
+    public function __construct()
+    {
+        $this->tirages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -138,6 +150,37 @@ class Combinaison
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tirage[]
+     */
+    public function getTirages(): Collection
+    {
+        return $this->tirages;
+    }
+
+    public function addTirage(Tirage $tirage): self
+    {
+        if (!$this->tirages->contains($tirage)) {
+            $this->tirages[] = $tirage;
+            $tirage->setCombinaison($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTirage(Tirage $tirage): self
+    {
+        if ($this->tirages->contains($tirage)) {
+            $this->tirages->removeElement($tirage);
+            // set the owning side to null (unless already changed)
+            if ($tirage->getCombinaison() === $this) {
+                $tirage->setCombinaison(null);
+            }
+        }
 
         return $this;
     }

@@ -21,7 +21,7 @@
 }
 
 .combinaison{
-  &-colonne, &-ligne, &-numero{
+  &-colonne, &-ligne, &-numero, &-ordre{
     border-radius: 4px;
     background: hsl(0, 0%, 29%);
 
@@ -30,4 +30,8 @@
       color: #fff;
     }
   }
+}
+
+.nombre-gagnant{
+  background: hsl(0, 0%, 4%) !important;
 }

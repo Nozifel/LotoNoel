@@ -19,5 +19,9 @@ $(document).on('change', '.type_combinaison', function(){
         case 'numero':
             bloc.find('.choix-numero').show()
             break;
+
+        case 'ordre':
+            bloc.find('.choix-ordre').show()
+            break;
     }
 })
