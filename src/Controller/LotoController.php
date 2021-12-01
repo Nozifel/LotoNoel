@@ -446,8 +446,8 @@ class LotoController extends AbstractController
      */
     public function tirageDuJour( Request $request, Loto $loto, TirageRepository $tirageRepository )
     {
-        if( $loto->getAuteur()->getId() != $this->getUser()->getId() )
-            throw $this->createNotFoundException('Page non trouvée !');
+        //if( $loto->getAuteur()->getId() != $this->getUser()->getId() )
+        //    throw $this->createNotFoundException('Page non trouvée !');
 
         $tirageParJour = $loto->getTiragesParJour();
 
